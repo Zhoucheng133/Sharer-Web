@@ -12,8 +12,6 @@ export default defineStore("store", ()=>{
   let fileList=ref<FileItem[]>([]);
   let token=ref<string>("");
   let path=ref<string[]>([]);
-  let selectedFile=ref<FileItem[]>([]);
-  let selectAll=ref<boolean>(false);
 
   const pathResolve=computed(()=>{
     let val="/";
@@ -24,5 +22,10 @@ export default defineStore("store", ()=>{
     return val;
   })
 
-  return {fileList, token, path, selectedFile, pathResolve, selectAll};
+  return {
+    fileList, 
+    token, 
+    path, 
+    pathResolve, 
+  };
 })

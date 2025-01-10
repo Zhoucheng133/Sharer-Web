@@ -7,12 +7,12 @@
       </div>
       <div class="tools">
         <SplitButton size="small" :model="uploadButtons" label="上传" />
-        <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="store().selectedFile.length==0" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="store().selectedFile.length==0" />
+        <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" />
+        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" />
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
-          <Checkbox v-model="store().selectAll" binary size="small" />
+          <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" />
         </div>
         <div></div>
         <div class="header_label">名称</div>
@@ -21,7 +21,7 @@
     </div>
     <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
       <div class="file_label" style="display: flex; justify-content: center;">
-        <Checkbox v-model="item.selected" binary size="small" />
+        <Checkbox v-model="item.selected" binary size="small" @change="selector().selectChange" />
       </div>
       <div>
         <FileIcon :file="item" />
@@ -41,6 +41,7 @@ import store from '../hooks/store';
 import { SplitButton, Button, Checkbox } from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
+import selector from '../hooks/selector';
 
 onMounted(async ()=>{
   if(await checkAuth(true)){
