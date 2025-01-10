@@ -14,6 +14,7 @@
         <div class="header_label" style="display: flex; justify-content: center;">
           <Checkbox v-model="store().selectAll" binary size="small" />
         </div>
+        <div></div>
         <div class="header_label">名称</div>
         <div class="header_label">大小</div>
       </div>
@@ -21,6 +22,9 @@
     <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
       <div class="file_label" style="display: flex; justify-content: center;">
         <Checkbox v-model="item.selected" binary size="small" />
+      </div>
+      <div>
+        <FileIcon :file="item" />
       </div>
       <div class="file_label">{{ item.name }}</div>
       <div class="file_label">{{ calSize(item) }}</div>
@@ -36,6 +40,7 @@ import { getList } from '../hooks/request';
 import store from '../hooks/store';
 import { SplitButton, Button, Checkbox } from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
+import FileIcon from '../components/FileIcon.vue';
 
 onMounted(async ()=>{
   if(await checkAuth(true)){
