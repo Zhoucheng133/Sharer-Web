@@ -11,7 +11,7 @@
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="store().selectedFile.length==0" />
       </div>
       <div class="header">
-        <div class="header_label">
+        <div class="header_label" style="display: flex; justify-content: center;">
           <Checkbox v-model="store().selectAll" binary size="small" />
         </div>
         <div class="header_label">名称</div>
@@ -19,9 +19,11 @@
       </div>
     </div>
     <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
-      <div class="file_label"></div>
+      <div class="file_label" style="display: flex; justify-content: center;">
+        <Checkbox v-model="item.selected" binary size="small" />
+      </div>
       <div class="file_label">{{ item.name }}</div>
-      <div class="file_label">{{ item.size }}</div>
+      <div class="file_label">{{ calSize(item) }}</div>
     </div>
   </div>
 </template>
@@ -33,7 +35,7 @@ import "../styles/home.css";
 import { getList } from '../hooks/request';
 import store from '../hooks/store';
 import { SplitButton, Button, Checkbox } from 'primevue';
-import { uploadButtons } from '../hooks/static';
+import { uploadButtons, calSize } from '../hooks/static';
 
 onMounted(async ()=>{
   if(await checkAuth(true)){

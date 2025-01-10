@@ -1,7 +1,7 @@
 import { defineStore } from "pinia";
 import { computed, ref } from "vue";
 
-interface FileItem{
+export interface FileItem{
   name: string,
   size: number,
   isDir: boolean,
