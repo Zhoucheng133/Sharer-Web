@@ -49,4 +49,9 @@ body{
   gap: 5px;
   height: 45px;
   align-items: center;
+  transition: background-color .3s linear;
+  cursor: pointer;
+}
+.file_item:hover{
+  background-color: rgb(245, 245, 245);
 }
