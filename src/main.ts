@@ -7,11 +7,14 @@ import { definePreset } from '@primevue/themes';
 import 'primeicons/primeicons.css';
 import ToastService from 'primevue/toastservice';
 import router from "./router/index";
+import { createPinia } from 'pinia';
 
 const app = createApp(App);
+const pinia = createPinia()
 
 app.use(ToastService);
 app.use(router);
+app.use(pinia);
 
 const primaryColor="sky";
 
