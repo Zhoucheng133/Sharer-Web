@@ -8,10 +8,13 @@ export async function checkAuth(home: boolean){
   if(auth.useAuth){
     if(home){
       router.replace("/login");
+      return false;
     }
   }else{
     if(!home){
       router.replace("/");
+      return false;
     }
   }
+  return true;
 }

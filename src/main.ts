@@ -16,7 +16,7 @@ app.use(ToastService);
 app.use(router);
 app.use(pinia);
 
-const primaryColor="sky";
+const primaryColor="cyan";
 
 const MyPreset = definePreset(Aura, {
   semantic: {
