@@ -21,7 +21,7 @@
     </div>
     <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
       <div class="file_label" style="display: flex; justify-content: center;">
-        <Checkbox v-model="item.selected" binary size="small" @change="selector().selectChange" />
+        <Checkbox v-model="item.selected" binary size="small" @change="()=>selector().selectChange(item)" />
       </div>
       <div>
         <FileIcon :file="item" />

@@ -16,6 +16,7 @@ export default defineStore("selector", ()=>{
           selected: true,
         }
       })
+      selectedFile.value=store().fileList;
     }else{
       store().fileList=store().fileList.map((item: FileItem)=>{
         return {
@@ -23,10 +24,20 @@ export default defineStore("selector", ()=>{
           selected: false,
         }
       })
+      selectedFile.value=[];
     }
   }
 
-  function selectChange(){
+  function selectChange(file: FileItem){
+
+    if(file.selected){
+      selectedFile.value.push(file);
+    }else{
+      selectedFile.value=selectedFile.value.filter((item: FileItem)=>{
+        return item.name!==file.name;
+      })
+    }
+
     if(store().fileList.every(item => item.selected == false)){
       selectAll.value=false;
       indeterminate.value=false;
