@@ -10,6 +10,7 @@ interface LoginResponse{
 }
 
 export async function checkAuth(home: boolean): Promise<boolean>{
+  
   const token=localStorage.getItem("token");
   if(token!=null && token.length!=0){
     store().token=token;
@@ -26,7 +27,7 @@ export async function checkAuth(home: boolean): Promise<boolean>{
   }
 
   if(store().token.length==0){
-    if(!home){
+    if(home){
       router.replace("/login");
     }
     return false;
@@ -42,7 +43,6 @@ export async function checkAuth(home: boolean): Promise<boolean>{
   if(home){
     router.replace("/login");
   }
-
   return false;
 }
 

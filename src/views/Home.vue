@@ -49,7 +49,8 @@ import selector from '../hooks/selector';
 import { clickHanlder, pathHandler } from '../hooks/handler';
 
 onMounted(async ()=>{
-  if(await checkAuth(true)){
+  const isAuth=await checkAuth(true);
+  if(isAuth){
     getList();
   }
 })
