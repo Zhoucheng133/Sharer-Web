@@ -1,0 +1,24 @@
+.preview_bg{
+  background-color: rgba(255, 255, 255, 0.8);
+  display: grid;
+  grid-template-rows: 50px auto 50px;
+}
+.preview_content{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.preview_media {
+  width: calc(70vh * 16 / 9);
+  height: 70vh;
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.preview_media .plyr {
+  height: 100%;
+  width: 100%;
+  object-fit: contain;
+}

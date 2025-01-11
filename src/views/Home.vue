@@ -34,6 +34,7 @@
       <div class="file_label">{{ calSize(item) }}</div>
     </div>
   </div>
+  <Preview class="preview"/>
 </template>
 
 <script lang="ts" setup>
@@ -47,6 +48,7 @@ import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
 import { clickHanlder, pathHandler } from '../hooks/handler';
+import Preview from '../components/Preview.vue';
 
 onMounted(async ()=>{
   const isAuth=await checkAuth(true);
