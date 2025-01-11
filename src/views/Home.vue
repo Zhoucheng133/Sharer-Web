@@ -19,7 +19,7 @@
         <div class="header_label">大小</div>
       </div>
     </div>
-    <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
+    <div class="file_item" v-for="(item, index) in store().fileList" :key="index" @click="clickHanlder(item)">
       <div class="file_label" style="display: flex; justify-content: center;">
         <Checkbox v-model="item.selected" binary size="small" @change="()=>selector().selectChange(item)" />
       </div>
@@ -42,6 +42,7 @@ import { SplitButton, Button, Checkbox } from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
+import { clickHanlder } from '../hooks/handler';
 
 onMounted(async ()=>{
   if(await checkAuth(true)){

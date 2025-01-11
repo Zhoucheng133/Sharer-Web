@@ -12,6 +12,7 @@ export default defineStore("store", ()=>{
   let fileList=ref<FileItem[]>([]);
   let token=ref<string>("");
   let path=ref<string[]>([]);
+  let loading=ref<boolean>(false);
 
   const pathResolve=computed(()=>{
     let val="/";
@@ -23,9 +24,10 @@ export default defineStore("store", ()=>{
   })
 
   return {
-    fileList, 
-    token, 
-    path, 
-    pathResolve, 
+    fileList,
+    token,
+    path,
+    pathResolve,
+    loading,
   };
 })
