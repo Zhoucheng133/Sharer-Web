@@ -3,7 +3,11 @@
     <div class="fixed">
       <div class="title_bar"></div>
       <div class="path">
-        {{ "Root" + store().pathResolve }}
+        <div :class="store().path.length==0 ? 'path_label_end' : 'path_label'" @click="pathHandler()">Root</div>
+        <div class="path_item" v-for="(item, index) in store().path" :key="index">
+          <i class="pi pi-arrow-right" style="margin-left: 5px; margin-right: 5px; font-size: 12px; display: flex; align-items: center;"></i>
+          <div :class="index==store().path.length-1 ? 'path_label_end' : 'path_label'" @click="pathHandler(index)">{{ item }}</div>
+        </div>
       </div>
       <div class="tools">
         <SplitButton size="small" :model="uploadButtons" label="上传" />
@@ -42,7 +46,7 @@ import { SplitButton, Button, Checkbox } from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder } from '../hooks/handler';
+import { clickHanlder, pathHandler } from '../hooks/handler';
 
 onMounted(async ()=>{
   if(await checkAuth(true)){
