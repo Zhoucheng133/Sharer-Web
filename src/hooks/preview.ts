@@ -34,6 +34,7 @@ export default defineStore("preview", ()=>{
     setTimeout(() => {
       previewFile.value="";
       exit.value=false;
+      previewType.value=undefined;
     }, 200);
   }
 
