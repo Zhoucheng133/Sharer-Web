@@ -34,7 +34,7 @@
       <div class="file_label">{{ calSize(item) }}</div>
     </div>
   </div>
-  <Preview class="preview"/>
+  <Preview class="preview" v-if="preview().previewFile.length!=0"/>
 </template>
 
 <script lang="ts" setup>
@@ -49,6 +49,7 @@ import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
 import { clickHanlder, pathHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
+import preview from '../hooks/preview';
 
 onMounted(async ()=>{
   const isAuth=await checkAuth(true);

@@ -22,3 +22,6 @@
   width: 100%;
   object-fit: contain;
 }
+.preview_title_bar{
+  background-color: white;
+}
