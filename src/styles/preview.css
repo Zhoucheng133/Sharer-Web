@@ -25,3 +25,16 @@
 .preview_title_bar{
   background-color: white;
 }
+.preview_title_bar{
+  display: flex;
+  align-items: center;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+.preview_title{
+  font-size: 20px;
+  max-width: 50vw;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}

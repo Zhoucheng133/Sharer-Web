@@ -1,7 +1,7 @@
 <template>
   <div class="preview_bg">
     <div class="preview_title_bar">
-      
+      <div class="preview_title">{{ preview().previewFile }}</div>
     </div>
     <div class="preview_content">
       <div class="preview_media" v-if="previewType==Types.Video">
