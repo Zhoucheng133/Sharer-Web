@@ -1,6 +1,7 @@
 import { getList } from "./request";
 import type { FileItem } from "./store";
 import store from "./store";
+import preview from '../hooks/preview';
 
 export async function clickHanlder(item: FileItem){
   if(item.isDir){
@@ -8,6 +9,8 @@ export async function clickHanlder(item: FileItem){
     store().path.push(item.name);
     await getList();
     store().loading=false;
+  }else{
+    preview().previewFile=item.name;
   }
 }
 

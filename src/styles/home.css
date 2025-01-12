@@ -75,3 +75,15 @@ body{
   height: 100vh;
   width: 100vw;
 }
+
+@keyframes opacityShow {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+.preview{
+  animation: opacityShow .2s linear forwards;
+}
