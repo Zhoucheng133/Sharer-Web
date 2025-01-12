@@ -42,7 +42,7 @@ export enum Types{
 function extName(name: string, ...exts: string[]){
   for (const element of exts) {
     const ext=`.${element}`;
-    if(name.endsWith(ext)){
+    if(name.toLowerCase().endsWith(ext)){
       return true;
     }
   }
