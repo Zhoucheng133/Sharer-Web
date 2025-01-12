@@ -1,7 +1,31 @@
-.preview_bg{
+@keyframes opacityShow {
+  0%{
+    opacity: 0;
+  }
+  100%{
+    opacity: 1;
+  }
+}
+
+@keyframes opacityHide {
+  0%{
+    opacity: 1;
+  }
+  100%{
+    opacity: 0;
+  }
+}
+.preview_bg, .preview_bg_hide{
   background-color: rgba(255, 255, 255, 0.8);
   display: grid;
   grid-template-rows: 50px auto 50px;
+}
+.preview_bg{
+  animation: opacityShow .2s linear forwards;
+}
+.preview_bg_hide{
+  opacity: 1;
+  animation: opacityHide .2s linear forwards;
 }
 .preview_content{
   display: flex;
@@ -37,4 +61,8 @@
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  user-select: text;
+}
+.preview_tools{
+  margin-left: auto;
 }

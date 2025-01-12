@@ -1,7 +1,11 @@
 <template>
-  <div class="preview_bg">
+  <div :class=" preview().exit ? 'preview_bg_hide' : 'preview_bg'">
     <div class="preview_title_bar">
       <div class="preview_title">{{ preview().previewFile }}</div>
+      <div class="preview_tools">
+        <Button label="下载" size="small" style="margin-right: 10px;"/>
+        <Button icon="pi pi-times" variant="text" rounded aria-label="Filter" size="small" @click="preview().closePreview" />
+      </div>
     </div>
     <div class="preview_content">
       <div class="preview_media" v-if="previewType==Types.Video">
@@ -22,6 +26,7 @@ import { nextTick, ref, watch } from "vue";
 import preview from "../hooks/preview";
 import { Types } from "../hooks/static";
 import { storeToRefs } from "pinia";
+import { Button } from "primevue";
 const playerContainer=ref(null);
 const mediaSource=ref<any>(null);
 
