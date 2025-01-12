@@ -87,3 +87,8 @@ body{
 .preview{
   animation: opacityShow .2s linear forwards;
 }
+.file_label{
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+}
