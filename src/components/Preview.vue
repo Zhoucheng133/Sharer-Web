@@ -32,6 +32,12 @@ const mediaSource=ref<any>(null);
 
 const {previewType}=storeToRefs(preview());
 
+window.addEventListener("keydown", (e)=>{
+  if(e.key=='Escape'){
+    preview().closePreview();
+  }
+})
+
 watch(previewType, async (newVal)=>{
   if(newVal==Types.Video){
     await nextTick();
