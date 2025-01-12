@@ -38,5 +38,25 @@ export default defineStore("preview", ()=>{
     }, 200);
   }
 
-  return {previewFile, previewType, previewUrl, closePreview, exit};
+  const download=async ()=>{
+    const response = await axios.get(`${hostname}/api/download?path=${encodeURIComponent(store().pathResolve) + encodeURIComponent(previewFile.value)}`,
+      {
+        headers: {
+          token: store().token,
+        },
+        responseType: 'blob',
+      }
+    );
+    const headers = response.headers;
+    
+    const blobUrl = URL.createObjectURL(response.data);
+    const a = document.createElement('a');
+    a.href = blobUrl;
+    a.download = decodeURIComponent(headers['file-name']); 
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  }
+
+  return {previewFile, previewType, previewUrl, closePreview, exit, download};
 })

@@ -3,7 +3,7 @@
     <div class="preview_title_bar">
       <div class="preview_title">{{ preview().previewFile }}</div>
       <div class="preview_tools">
-        <Button label="下载" size="small" style="margin-right: 10px;"/>
+        <Button label="下载" size="small" style="margin-right: 10px;" @click="preview().download" />
         <Button icon="pi pi-times" variant="text" rounded aria-label="Filter" size="small" @click="preview().closePreview" />
       </div>
     </div>
