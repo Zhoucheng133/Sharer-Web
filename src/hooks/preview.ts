@@ -15,7 +15,6 @@ export default defineStore("preview", ()=>{
       return;
     }
     previewType.value=getFileType(previewFile.value);
-    // console.log(previewType.value);
     previewUrl.value=`${hostname}/api/raw?path=${store().pathResolve}${previewFile.value}&token=${store().token}`;
   })
 
@@ -29,5 +28,10 @@ export default defineStore("preview", ()=>{
     }, 200);
   }
 
-  return {previewFile, previewType, previewUrl, closePreview, exit};
+  const download=()=>{
+    const link=`${hostname}/api/download?path=${store().pathResolve}${previewFile.value}&token=${store().token}`;
+    window.location.href=link;
+  }
+
+  return {previewFile, previewType, previewUrl, closePreview, exit, download};
 })
