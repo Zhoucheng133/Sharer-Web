@@ -10,8 +10,16 @@
     <div class="preview_content">
       <div class="preview_media" v-if="preview().previewType==Types.Video">
         <video ref="playerContainer" controls playsinline>
-          <source ref="mediaSource" :src="preview().previewUrl" />
+          <source :src="preview().previewUrl" />
         </video>
+      </div>
+      <div class="preview_image" v-else-if="preview().previewType==Types.Image">
+        <img :src="preview().previewUrl" alt="" class="preview_image">
+      </div>
+      <div class="preview_audio" v-else-if="preview().previewType==Types.Audio">
+        <audio ref="playerContainer" controls playsinline>
+          <source :src="preview().previewUrl" />
+        </audio>
       </div>
     </div>
     <div></div>
@@ -27,7 +35,6 @@ import preview from "../hooks/preview";
 import { Types } from "../hooks/static";
 import { Button } from "primevue";
 const playerContainer=ref(null);
-const mediaSource=ref<any>(null);
 
 window.addEventListener("keydown", (e)=>{
   if(e.key=='Escape'){
@@ -36,7 +43,7 @@ window.addEventListener("keydown", (e)=>{
 })
 
 onMounted(()=>{
-  if(preview().previewType==Types.Video && playerContainer.value){
+  if((preview().previewType==Types.Video || preview().previewType==Types.Audio) && playerContainer.value){
     new Plyr(playerContainer.value, {
       i18n: {
         restart: '重新开始',
