@@ -12,7 +12,7 @@
       <div class="tools">
         <SplitButton size="small" :model="uploadButtons" label="上传" />
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" />
+        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="($event)"/>
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
@@ -41,13 +41,12 @@
 import { onMounted } from 'vue';
 import { checkAuth } from '../hooks/auth';
 import "../styles/home.css";
-import { getList } from '../hooks/request';
 import store from '../hooks/store';
 import { SplitButton, Button, Checkbox } from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 

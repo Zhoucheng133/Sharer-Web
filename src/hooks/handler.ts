@@ -1,9 +1,27 @@
-import { getList } from "./request";
 import type { FileItem } from "./store";
 import store from "./store";
 import preview from '../hooks/preview';
 import selector from "./selector";
 import hostname from "./hostname";
+import axios from "axios";
+
+export async function getList(){
+  const {data: response}=await axios.post(`${hostname}/api/list`, {
+    "path": store().pathResolve
+  }, {
+    headers: {
+      token: store().token
+    }
+  });
+  const list=response.ok ? response.items:[];
+  store().fileList=list.map((item: any)=>{
+    return {
+      ...item,
+      selected: false,
+    }
+  })
+  
+}
 
 export async function clickHanlder(item: FileItem){
   if(item.isDir){
