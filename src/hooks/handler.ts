@@ -3,6 +3,7 @@ import type { FileItem } from "./store";
 import store from "./store";
 import preview from '../hooks/preview';
 import selector from "./selector";
+import hostname from "./hostname";
 
 export async function clickHanlder(item: FileItem){
   if(item.isDir){
@@ -28,4 +29,11 @@ export async function pathHandler(index?: number){
   }
   await getList();
   store().loading=false;
+}
+
+export function downloadHandler(){
+  if(selector().selectedFile.length==1){
+    const link=`${hostname}/api/download?path=${store().pathResolve}${selector().selectedFile[0].name}&token=${store().token}`;
+    window.location.href=link;
+  }
 }
