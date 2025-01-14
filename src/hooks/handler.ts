@@ -68,3 +68,23 @@ export function downloadHandler(){
     window.location.href=link;
   }
 }
+
+export function delHandler(event: any, confirm: any, toast: any){
+  confirm.require({
+    target: event.currentTarget,
+    message: '你确定要删除吗',
+    icon: 'pi pi-exclamation-triangle',
+    rejectProps: {
+      label: '取消',
+      severity: 'secondary',
+      outlined: true
+    },
+    acceptProps: {
+      label: '删除',
+      severity: 'danger'
+    },
+    accept: () => {
+      // TODO 删除的操作
+    },
+  });
+}

@@ -1,4 +1,6 @@
 <template>
+  <Toast />
+  <ConfirmPopup />
   <div class="page">
     <div class="fixed">
       <div class="title_bar"></div>
@@ -12,7 +14,8 @@
       <div class="tools">
         <SplitButton size="small" :model="uploadButtons" label="上传" />
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="($event)"/>
+        
+        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="delHandler($event, confirm, toast)"/>
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
@@ -42,13 +45,18 @@ import { onMounted } from 'vue';
 import { checkAuth } from '../hooks/auth';
 import "../styles/home.css";
 import store from '../hooks/store';
-import { SplitButton, Button, Checkbox } from 'primevue';
+import { SplitButton, Button, Checkbox, ConfirmPopup, Toast} from 'primevue';
 import { uploadButtons, calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, delHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
+import { useConfirm } from "primevue/useconfirm";
+import { useToast } from "primevue/usetoast";
+
+const confirm = useConfirm();
+const toast = useToast();
 
 onMounted(async ()=>{
   const isAuth=await checkAuth(true);
