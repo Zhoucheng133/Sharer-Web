@@ -23,15 +23,15 @@
         <div class="header_label">大小</div>
       </div>
     </div>
-    <div class="file_item" v-for="(item, index) in store().fileList" :key="index" @click="clickHanlder(item)">
+    <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
       <div class="file_label" style="display: flex; justify-content: center;">
         <Checkbox v-model="item.selected" binary size="small" @change="()=>selector().selectChange(item)" />
       </div>
-      <div>
+      <div @click="clickHanlder(item)">
         <FileIcon :file="item" />
       </div>
-      <div class="file_label">{{ item.name }}</div>
-      <div class="file_label">{{ calSize(item) }}</div>
+      <div class="file_label" @click="clickHanlder(item)">{{ item.name }}</div>
+      <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
     </div>
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
