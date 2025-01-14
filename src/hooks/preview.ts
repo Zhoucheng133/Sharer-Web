@@ -15,7 +15,8 @@ export default defineStore("preview", ()=>{
       return;
     }
     previewType.value=getFileType(previewFile.value);
-    previewUrl.value=`${hostname}/api/raw?path=${store().pathResolve}${previewFile.value}&token=${store().token}`;
+    let data=store().pathResolve+previewFile.value;
+    previewUrl.value=`${hostname}/api/raw?path=${encodeURIComponent(data)}&token=${store().token}`;
   })
 
   const closePreview=()=>{
@@ -29,7 +30,8 @@ export default defineStore("preview", ()=>{
   }
 
   const download=()=>{
-    const link=`${hostname}/api/download?path=${store().pathResolve}${previewFile.value}&token=${store().token}`;
+    let data=store().pathResolve+previewFile.value;
+    const link=`${hostname}/api/download?path=${encodeURIComponent(data)}&token=${store().token}`;
     window.location.href=link;
   }
 
