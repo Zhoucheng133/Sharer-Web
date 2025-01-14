@@ -21,8 +21,16 @@
           <source :src="preview().previewUrl" />
         </audio>
       </div>
-      <div v-else-if="preview().previewType=Types.Pdf">
+      <div v-else-if="preview().previewType==Types.Pdf">
         <iframe class="preview_pdf" :src="preview().previewUrl" frameborder="0"></iframe>
+      </div>
+      <div class="preview_other" v-else>
+        <img :src="getAsset({
+          name: preview().previewFile,
+          size: 0,
+          isDir: false,
+          selected: false,
+        })" alt="" height="100px" />
       </div>
     </div>
     <div></div>
@@ -35,7 +43,7 @@ import Plyr from "plyr";
 import 'plyr/dist/plyr.css';
 import { onMounted, ref } from "vue";
 import preview from "../hooks/preview";
-import { Types } from "../hooks/static";
+import { getAsset, Types } from "../hooks/static";
 import { Button } from "primevue";
 const playerContainer=ref(null);
 

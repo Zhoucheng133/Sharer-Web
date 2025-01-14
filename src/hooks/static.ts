@@ -76,3 +76,56 @@ export function getFileType(name: string): Types{
   }
   return Types.Unkown;
 }
+
+import audioIcon from "../assets/audio.svg";
+import btIcon from "../assets/bt.svg";
+import folerIcon from "../assets/folder.svg";
+import htmlIcon from "../assets/html.svg";
+import imageIcon from "../assets/image.svg";
+import pdfIcon from "../assets/pdf.svg";
+import pptIcon from "../assets/ppt.svg";
+import txtIcon from "../assets/txt.svg";
+import unkownIcon from "../assets/unkown.svg";
+import videoIcon from "../assets/video.svg";
+import wordIcon from "../assets/word.svg";
+import xlsIcon from "../assets/xls.svg";
+import zipIcon from "../assets/zip.svg";
+
+function getType(file: FileItem){
+  if(file.isDir){
+    return Types.Folder;
+  }
+  const name: string=file.name;
+  return getFileType(name);
+}
+
+export function getAsset(file: FileItem){
+  switch (getType(file)) {
+    case Types.Audio:
+      return audioIcon;
+    case Types.Bt:
+      return btIcon;
+    case Types.Folder:
+      return folerIcon;
+    case Types.Html:
+      return htmlIcon;
+    case Types.Image:
+      return imageIcon;
+    case Types.Pdf:
+      return pdfIcon;
+    case Types.Ppt:
+      return pptIcon;
+    case Types.Txt:
+      return txtIcon;
+    case Types.Unkown:
+      return unkownIcon;
+    case Types.Video:
+      return videoIcon;
+    case Types.Word:
+      return wordIcon;
+    case Types.Xls:
+      return xlsIcon;
+    case Types.Zip:
+      return zipIcon;
+  }
+}
