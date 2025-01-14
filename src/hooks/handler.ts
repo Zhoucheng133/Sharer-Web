@@ -41,10 +41,12 @@ export async function pathHandler(index?: number){
   store().loading=true;
   if(index==undefined){
     store().path=[];
-    
   }else{
     store().path.splice(index+1);
   }
+  selector().selectAll=false;
+  selector().selectedFile=[];
+  selector().indeterminate=false;
   await getList();
   store().loading=false;
 }
