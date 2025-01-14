@@ -21,6 +21,9 @@
           <source :src="preview().previewUrl" />
         </audio>
       </div>
+      <div v-else-if="preview().previewType=Types.Pdf">
+        <iframe class="preview_pdf" :src="preview().previewUrl" frameborder="0"></iframe>
+      </div>
     </div>
     <div></div>
   </div>

@@ -70,3 +70,7 @@
   max-width: 80vw;
   max-height: 80vh;
 }
+.preview_pdf{
+  height: calc(100vh - 50px);
+  width: 100vw;
+}
