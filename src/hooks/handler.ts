@@ -77,7 +77,11 @@ export function downloadHandler(item?: FileItem){
   }
 }
 
-export function delHandler(event: any, confirm: any, toast: any){
+export function delHandler(event: any, confirm: any, toast: any, item?: FileItem){
+  if(!item && selector().selectedFile.length==0){
+    return;
+  }
+  let files= item ? [item.name] : selector().selectedFile.map((item)=>item.name);
   confirm.require({
     target: event.currentTarget,
     message: '你确定要删除吗',
@@ -94,7 +98,7 @@ export function delHandler(event: any, confirm: any, toast: any){
     accept: async () => {
       const {data: response}=await axios.post(`${hostname}/api/del`, {
         path: store().pathResolve,
-        files: selector().selectedFile.map((item)=>item.name),
+        files: files,
       }, {
         headers: {
           token: store().token,
