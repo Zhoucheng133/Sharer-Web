@@ -13,7 +13,7 @@
       </div>
       <div class="tools">
         <SplitButton size="small" :model="uploadButtons" label="上传" />
-        <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler" />
+        <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
         
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="delHandler($event, confirm, toast)"/>
       </div>
@@ -34,6 +34,11 @@
         <FileIcon :file="item" />
       </div>
       <div class="file_label" @click="clickHanlder(item)">{{ item.name }}</div>
+      <div class="file_option">
+        <Button icon="pi pi-download" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px;" @click="downloadHandler(item)" />
+        <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" />
+        <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" />
+      </div>
       <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
     </div>
   </div>

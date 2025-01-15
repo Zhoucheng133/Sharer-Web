@@ -45,7 +45,7 @@ body{
 }
 .file_item{
   display: grid;
-  grid-template-columns: 45px 45px auto 100px;
+  grid-template-columns: 45px 45px auto 0px 100px;
   gap: 5px;
   height: 45px;
   align-items: center;
@@ -53,7 +53,20 @@ body{
   cursor: pointer;
 }
 .file_item:hover{
+  grid-template-columns: 45px 45px auto 120px 100px;
   background-color: rgb(245, 245, 245);
+}
+.file_item:hover>.file_option{
+  opacity: 1;
+}
+.file_item>.file_option{
+  opacity: 0;
+}
+@media (max-width: 500px) {
+  .file_item:hover {
+    grid-template-columns: 45px 45px auto 0px 100px;
+    background-color: rgb(245, 245, 245);
+  }
 }
 .path_item{
   display: flex;
@@ -80,4 +93,12 @@ body{
   white-space: nowrap;
   text-overflow: ellipsis;
   line-height: 45px;
+}
+.file_option{
+  overflow: hidden;
+  transition: opacity .2s linear;
+  display: flex;
+}
+.file_option .pi{
+  font-size: 15px;
 }

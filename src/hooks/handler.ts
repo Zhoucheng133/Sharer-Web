@@ -56,7 +56,13 @@ interface MutliData{
   files: string[]
 }
 
-export function downloadHandler(){
+export function downloadHandler(item?: FileItem){
+  if(item){
+    let data=store().pathResolve+item.name;
+    const link=`${hostname}/api/download?path=${encodeURIComponent(data)}&token=${store().token}`;
+    window.location.href=link;
+    return;
+  }
   if(selector().selectedFile.length==1){
     let data=store().pathResolve+selector().selectedFile[0].name;
     const link=`${hostname}/api/download?path=${encodeURIComponent(data)}&token=${store().token}`;
