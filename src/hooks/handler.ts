@@ -85,8 +85,24 @@ export function delHandler(event: any, confirm: any, toast: any){
       label: '删除',
       severity: 'danger'
     },
-    accept: () => {
-      // TODO 删除的操作
+    accept: async () => {
+      const {data: response}=await axios.post(`${hostname}/api/del`, {
+        path: store().pathResolve,
+        files: selector().selectedFile.map((item)=>item.name),
+      }, {
+        headers: {
+          token: store().token,
+        }
+      })
+      if(response.ok){
+        toast.add({ severity: 'success', summary: '操作成功', detail: "已删除文件(夹)", life: 2000 });
+        selector().selectAll=false;
+        selector().indeterminate=false;
+        selector().selectedFile=[];
+        getList();
+      }else{
+        toast.add({ severity: 'error', summary: '删除失败', detail: response.msg, life: 2000 });
+      }
     },
   });
 }
