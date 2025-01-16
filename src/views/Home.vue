@@ -25,6 +25,7 @@
         <div></div>
         <div class="header_label">名称</div>
         <div class="header_label">大小</div>
+        <div></div>
       </div>
     </div>
     <div class="file_item" v-for="(item, index) in store().fileList" :key="index">
@@ -41,10 +42,14 @@
         <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler($event, confirm, toast, item)" />
       </div>
       <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
+      <div class="file_option_m">
+        <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" style="height: 30px; width: 30px;" @click="drawer().toggleDrawer(item)" />
+      </div>
     </div>
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
-  <Mkdir/>
+  <Mkdir />
+  <Drawer :visiable="drawer().showDrawer" />
 </template>
 
 <script lang="ts" setup>
@@ -62,6 +67,8 @@ import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
 import { useToast } from "primevue/usetoast";
 import Mkdir from '../components/dialogs/Mkdir.vue';
+import Drawer from '../components/Drawer.vue';
+import drawer from '../hooks/drawer';
 
 const confirm = useConfirm();
 const toast = useToast();

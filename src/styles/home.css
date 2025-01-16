@@ -32,12 +32,17 @@ body{
 }
 .header{
   display: grid;
-  grid-template-columns: 45px 45px auto 100px;
+  grid-template-columns: 45px 45px auto 100px 0px;
   gap: 5px;
   height: 40px;
   background-color: rgb(250, 250, 250);
   align-items: center;
   margin-top: 5px;
+}
+@media (max-width: 500px) {
+  .header{
+    grid-template-columns: 45px 45px auto 100px 45px;
+  }
 }
 .header_label{
   color: grey;
@@ -45,7 +50,7 @@ body{
 }
 .file_item{
   display: grid;
-  grid-template-columns: 45px 45px auto 0px 100px;
+  grid-template-columns: 45px 45px auto 0px 100px 0px;
   gap: 5px;
   height: 45px;
   align-items: center;
@@ -53,7 +58,7 @@ body{
   cursor: pointer;
 }
 .file_item:hover{
-  grid-template-columns: 45px 45px auto 120px 100px;
+  grid-template-columns: 45px 45px auto 120px 100px 0px;
   background-color: rgb(245, 245, 245);
 }
 .file_item:hover>.file_option{
@@ -63,8 +68,11 @@ body{
   opacity: 0;
 }
 @media (max-width: 500px) {
+  .file_item {
+    grid-template-columns: 45px 45px auto 0px 100px 45px;
+  }
   .file_item:hover {
-    grid-template-columns: 45px 45px auto 0px 100px;
+    grid-template-columns: 45px 45px auto 0px 100px 45px;
     background-color: rgb(245, 245, 245);
   }
 }
@@ -100,5 +108,15 @@ body{
   display: flex;
 }
 .file_option .pi{
+  font-size: 15px;
+}
+.file_option_m{
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.file_option_m .pi{
   font-size: 15px;
 }
