@@ -46,6 +46,7 @@
         <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" style="height: 30px; width: 30px;" @click="drawer().toggleDrawer(item)" />
       </div>
     </div>
+    <div style="height: 50px;"></div>
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
   <Mkdir />
