@@ -12,9 +12,10 @@
         </div>
       </div>
       <div class="tools">
-        <SplitButton size="small" :model="uploadButtons" label="上传" />
+        <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
+        <Menu ref="menu" id="overlay_menu" :model="addItems" :popup="true" />
+
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-        
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="delHandler($event, confirm, toast)"/>
       </div>
       <div class="header">
@@ -46,12 +47,12 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted } from 'vue';
+import { onMounted, ref } from 'vue';
 import { checkAuth } from '../hooks/auth';
 import "../styles/home.css";
 import store from '../hooks/store';
-import { SplitButton, Button, Checkbox, ConfirmPopup, Toast} from 'primevue';
-import { uploadButtons, calSize } from '../hooks/static';
+import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
+import { calSize, addItems } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
 import { clickHanlder, pathHandler, downloadHandler, getList, delHandler } from '../hooks/handler';
@@ -62,6 +63,12 @@ import { useToast } from "primevue/usetoast";
 
 const confirm = useConfirm();
 const toast = useToast();
+
+const menu = ref();
+function addButtons(event: any){
+  menu.value.toggle(event);
+}
+
 
 onMounted(async ()=>{
   const isAuth=await checkAuth(true);

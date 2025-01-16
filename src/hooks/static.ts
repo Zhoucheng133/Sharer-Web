@@ -1,14 +1,5 @@
 import type { FileItem } from "./store";
 
-export const uploadButtons=[
-  {
-    label: '上传文件夹',
-    command: () => {
-      // TODO 上传文件夹
-    }
-  },
-];
-
 export function calSize(file: FileItem){
   if(file.isDir){
     return "";
@@ -129,3 +120,23 @@ export function getAsset(file: FileItem){
       return zipIcon;
   }
 }
+
+export const addItems = [
+  {
+    label: '添加',
+    items: [
+      {
+        label: '上传文件',
+        icon: 'pi pi-file'
+      },
+      {
+        label: '上传文件夹',
+        icon: 'pi pi-folder'
+      },
+      {
+        label: '新建文件夹',
+        icon: 'pi pi-folder-plus'
+      }
+    ]
+  }
+]
