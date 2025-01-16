@@ -1,6 +1,6 @@
 <template>
   <div>
-    <img :src="getAsset(props.file)" alt="" height="25px">
+    <img :src="getAsset(props.file)" alt="" style="height: 30px;">
   </div>
 </template>
 
