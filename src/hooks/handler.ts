@@ -4,6 +4,7 @@ import preview from '../hooks/preview';
 import selector from "./selector";
 import hostname from "./hostname";
 import axios from "axios";
+import dialogs from "./dialogs";
 
 export async function getList(){
   const {data: response}=await axios.post(`${hostname}/api/list`, {
@@ -115,4 +116,41 @@ export function delHandler(event: any, confirm: any, toast: any, item?: FileItem
       }
     },
   });
+}
+
+export function uploadHandler(toast: any){
+  toast.add({ severity: 'info', summary: '未完成的功能', detail: 'TODO', life: 2000 });
+}
+
+export function uploadFolderHandler(toast: any){
+  toast.add({ severity: 'info', summary: '未完成的功能', detail: 'TODO', life: 2000 });
+}
+
+export function mkdirHandler(){
+  dialogs().showMkdirDialog=true;
+}
+
+export const addItems=(toast: any)=>{
+  return [
+    {
+      label: '添加',
+      items: [
+        {
+          label: '上传文件',
+          icon: 'pi pi-file',
+          command: ()=>uploadHandler(toast)
+        },
+        {
+          label: '上传文件夹',
+          icon: 'pi pi-folder',
+          command: ()=>uploadFolderHandler(toast)
+        },
+        {
+          label: '新建文件夹',
+          icon: 'pi pi-folder-plus',
+          command: ()=>mkdirHandler()
+        }
+      ]
+    }
+  ]
 }
