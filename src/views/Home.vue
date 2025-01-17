@@ -38,7 +38,7 @@
       <div class="file_label" @click="clickHanlder(item)">{{ item.name }}</div>
       <div class="file_option">
         <Button icon="pi pi-download" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px;" @click="downloadHandler(item)" />
-        <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" />
+        <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="renameHandler(item)" />
         <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler($event, confirm, toast, item)" />
       </div>
       <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
@@ -50,6 +50,7 @@
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
   <Mkdir />
+  <Rename />
   <Drawer :visiable="drawer().showDrawer" />
 </template>
 
@@ -62,7 +63,7 @@ import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
 import { calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList, delHandler, addItems } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, delHandler, addItems, renameHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -70,6 +71,7 @@ import { useToast } from "primevue/usetoast";
 import Mkdir from '../components/dialogs/Mkdir.vue';
 import Drawer from '../components/Drawer.vue';
 import drawer from '../hooks/drawer';
+import Rename from '../components/dialogs/Rename.vue';
 
 const confirm = useConfirm();
 const toast = useToast();

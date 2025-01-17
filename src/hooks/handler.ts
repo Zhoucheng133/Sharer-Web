@@ -126,6 +126,11 @@ export function uploadFolderHandler(toast: any){
   toast.add({ severity: 'info', summary: '未完成的功能', detail: 'TODO', life: 2000 });
 }
 
+export function renameHandler(file: FileItem){
+  dialogs().selectName=file.name;
+  dialogs().showRenameDialog=true;
+}
+
 export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
 }
