@@ -25,6 +25,8 @@ body{
 }
 .path{
   display: flex;
+  overflow-x: auto;
+  white-space: nowrap;
 }
 .fixed{
   position: sticky;
