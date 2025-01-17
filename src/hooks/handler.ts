@@ -14,7 +14,8 @@ export async function getList(){
       token: store().token
     }
   });
-  const list=response.ok ? response.items:[];
+  const list=response.ok ? (response.items ==null ? []: response.items) : [];
+  
   store().fileList=list.map((item: any)=>{
     return {
       ...item,
@@ -26,10 +27,8 @@ export async function getList(){
 
 export async function clickHanlder(item: FileItem){
   if(item.isDir){
-    store().loading=true;
     store().path.push(item.name);
     await getList();
-    store().loading=false;
     selector().selectedFile=[];
     selector().indeterminate=false;
     selector().selectAll=false;
@@ -39,7 +38,6 @@ export async function clickHanlder(item: FileItem){
 }
 
 export async function pathHandler(index?: number){
-  store().loading=true;
   if(index==undefined){
     store().path=[];
   }else{
@@ -49,7 +47,6 @@ export async function pathHandler(index?: number){
   selector().selectedFile=[];
   selector().indeterminate=false;
   await getList();
-  store().loading=false;
 }
 
 interface MutliData{
