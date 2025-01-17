@@ -18,7 +18,8 @@ export default defineStore("drawer", ()=>{
   }
 
   function del(){
-    
+    showDrawer.value=false;
+    delHandler(selectedItem.value)
   }
 
   function rename(){

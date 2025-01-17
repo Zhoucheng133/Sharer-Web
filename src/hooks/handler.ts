@@ -75,7 +75,12 @@ export function downloadHandler(item?: FileItem){
   }
 }
 
-export function delHandler(event: any, confirm: any, toast: any, item?: FileItem){
+export function delHandler(item: FileItem){
+  dialogs().selectName=item.name;
+  dialogs().showDelDialog=true;
+}
+
+export function menuDelHandler(event: any, confirm: any, toast: any, item?: FileItem){
   if(!item && selector().selectedFile.length==0){
     return;
   }

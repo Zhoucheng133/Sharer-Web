@@ -16,7 +16,7 @@
         <Menu ref="menu" id="overlay_menu" :model="addItems(toast)" :popup="true" />
 
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="delHandler($event, confirm, toast)"/>
+        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
@@ -39,7 +39,7 @@
       <div class="file_option">
         <Button icon="pi pi-download" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px;" @click="downloadHandler(item)" />
         <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="renameHandler(item)" />
-        <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler($event, confirm, toast, item)" />
+        <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler(item)" />
       </div>
       <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
       <div class="file_option_m">
@@ -51,6 +51,7 @@
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
   <Mkdir />
   <Rename />
+  <Delete />
   <Drawer :visiable="drawer().showDrawer" />
 </template>
 
@@ -63,7 +64,7 @@ import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
 import { calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList, delHandler, addItems, renameHandler } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -72,6 +73,7 @@ import Mkdir from '../components/dialogs/Mkdir.vue';
 import Drawer from '../components/Drawer.vue';
 import drawer from '../hooks/drawer';
 import Rename from '../components/dialogs/Rename.vue';
+import Delete from '../components/dialogs/Delete.vue';
 
 const confirm = useConfirm();
 const toast = useToast();
