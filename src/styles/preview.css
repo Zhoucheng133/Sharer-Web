@@ -40,6 +40,17 @@
   justify-content: center;
   align-items: center;
 }
+@media (max-aspect-ratio: 1/1) {
+  .preview_media {
+    /* width: calc(70vh * 16 / 9); */
+    width: 80vw;
+    height: calc(80vw * 9 / 16);
+    overflow: hidden;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
 
 .preview_media .plyr {
   height: 100%;
