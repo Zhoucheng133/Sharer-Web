@@ -152,6 +152,7 @@ function uploadFiles(files: FileList, toast: any) {
     onUploadProgress: (progressEvent: any) => {
       // const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
       // console.log(`上传进度：${percentCompleted}%`);
+      // TODO 在这里处理上传进度
     },
   })
   .then(_ => {
