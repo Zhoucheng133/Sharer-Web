@@ -5,6 +5,8 @@ import selector from "./selector";
 import hostname from "./hostname";
 import axios from "axios";
 import dialogs from "./dialogs";
+import { nanoid } from "nanoid";
+import progress from "./progress";
 
 export async function getList(){
   const {data: response}=await axios.post(`${hostname}/api/list`, {
@@ -143,16 +145,27 @@ function uploadFiles(files: FileList, toast: any) {
   for (const file of files) {
     formData.append('files', file);
   }
-
+  const id=nanoid();
   axios.post(`${hostname}/api/upload`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
       token: store().token
     },
     onUploadProgress: (progressEvent: any) => {
-      // const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
-      // console.log(`上传进度：${percentCompleted}%`);
-      // TODO 在这里处理上传进度
+      let index=progress().uploadList.findIndex((item)=>item.id==id);
+      const count=files.length;
+      if(index==-1){
+        progress().uploadList.push({
+          id: id,
+          name: count==1 ? files[0].name : `${files[0].name}等文件`,
+          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        })
+      }else{
+        progress().uploadList[index]={
+          ...progress().uploadList[index],
+          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+      }
     },
   })
   .then(_ => {
