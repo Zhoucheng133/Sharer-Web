@@ -121,7 +121,46 @@ export function menuDelHandler(event: any, confirm: any, toast: any, item?: File
 }
 
 export function uploadHandler(toast: any){
-  toast.add({ severity: 'info', summary: '未完成的功能', detail: 'TODO', life: 2000 });
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = '*/*';
+  input.multiple = true;
+  input.style.display = 'none';
+  input.addEventListener('change', (event) => {
+    const target = event.currentTarget as HTMLInputElement;
+    if (target.files && target.files.length > 0) {
+      uploadFiles(target.files, toast);
+    }
+  });
+  document.body.appendChild(input);
+  input.click();
+  input.remove();
+
+}
+
+function uploadFiles(files: FileList, toast: any) {
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append('files', file);
+  }
+
+  axios.post(`${hostname}/api/upload`, formData, {
+    headers: {
+      'Content-Type': 'multipart/form-data',
+      token: store().token
+    },
+    onUploadProgress: (progressEvent: any) => {
+      // const percentCompleted = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+      // console.log(`上传进度：${percentCompleted}%`);
+    },
+  })
+  .then(_ => {
+    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    getList();
+  })
+  .catch(error => {
+    toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+  });
 }
 
 export function uploadFolderHandler(toast: any){
