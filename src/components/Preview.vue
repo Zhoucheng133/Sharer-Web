@@ -30,7 +30,7 @@
           size: 0,
           isDir: false,
           selected: false,
-        })" alt="" height="100px" />
+        })" alt="" style="height: 100px;" />
       </div>
     </div>
     <div></div>
