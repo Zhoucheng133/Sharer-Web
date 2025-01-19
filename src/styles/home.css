@@ -125,3 +125,17 @@ body{
 .file_option_m .pi{
   font-size: 15px;
 }
+.progress_component{
+  position: fixed;
+  bottom: 50px;
+  right: 50px;
+}
+
+@media (max-width: 500px) {
+  .progress_component{
+    position: fixed;
+    bottom: 50px;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

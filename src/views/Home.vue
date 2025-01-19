@@ -53,6 +53,7 @@
   <Rename />
   <Delete />
   <Drawer :visiable="drawer().showDrawer" />
+  <Progress class="progress_component" />
 </template>
 
 <script lang="ts" setup>
@@ -74,6 +75,7 @@ import Drawer from '../components/Drawer.vue';
 import drawer from '../hooks/drawer';
 import Rename from '../components/dialogs/Rename.vue';
 import Delete from '../components/dialogs/Delete.vue';
+import Progress from '../components/Progress.vue';
 
 const confirm = useConfirm();
 const toast = useToast();
