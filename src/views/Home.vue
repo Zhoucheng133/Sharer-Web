@@ -95,7 +95,7 @@ onMounted(()=>{
     fileUploader.value.addEventListener('change', (event: any) => {
       const target = event.currentTarget as HTMLInputElement;
       if (target.files && target.files.length > 0) {
-        uploadFiles(target.files, toast);
+        uploadFiles(target.files, toast, target);
       }
     });
   }

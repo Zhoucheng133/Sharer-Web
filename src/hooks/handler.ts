@@ -126,7 +126,7 @@ function uploadHandler(fileUploader: any){
   fileUploader.click();
 }
 
-export function uploadFiles(files: FileList, toast: any) {
+export function uploadFiles(files: FileList, toast: any, target: any) {
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -158,6 +158,7 @@ export function uploadFiles(files: FileList, toast: any) {
           progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
           size: totalSize
         })
+        target.value = '';
       }else{
         progress().uploadList[index]={
           ...progress().uploadList[index],
