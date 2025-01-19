@@ -10,8 +10,19 @@ export interface UploadItem{
 
 export default defineStore("progress", ()=>{
   let uploadList=ref<UploadItem[]>([]);
+  let panelHeight=ref(50);
+
+  const togglePanel=()=>{
+    if(panelHeight.value==50){
+      panelHeight.value=400;
+    }else{
+      panelHeight.value=50;
+    }
+  }
 
   return {
-    uploadList
+    uploadList,
+    togglePanel,
+    panelHeight
   }
 })

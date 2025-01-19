@@ -146,6 +146,9 @@ function uploadFiles(files: FileList, toast: any) {
     formData.append('files', file);
   }
   const id=nanoid();
+  if(progress().panelHeight==50){
+    progress().togglePanel();
+  }
   axios.post(`${hostname}/api/upload`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',

@@ -1,8 +1,8 @@
 <template>
-  <div class="progress_panel" :style="{height: panelHeight+'px'}">
-    <div class="progress_titlebar" @click="togglePanel">
+  <div class="progress_panel" :style="{height: progress().panelHeight+'px'}">
+    <div class="progress_titlebar" @click="progress().togglePanel()">
       <div>上传列表</div>
-      <i class="pi pi-arrow-circle-up progress_titleicon" v-if="panelHeight==50"></i>
+      <i class="pi pi-arrow-circle-up progress_titleicon" v-if="progress().panelHeight==50"></i>
       <i class="pi pi-arrow-circle-down progress_titleicon" v-else></i>
     </div>
     <div class="progress_content">
@@ -24,18 +24,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
 import "../styles/progress.css";
 import progress from "../hooks/progress";
 import { calSize } from "../hooks/static";
-
-let panelHeight=ref(50);
-
-const togglePanel=()=>{
-  if(panelHeight.value==50){
-    panelHeight.value=400;
-  }else{
-    panelHeight.value=50;
-  }
-}
 </script>
