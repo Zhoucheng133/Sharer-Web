@@ -16,7 +16,8 @@
         <Menu ref="menu" id="overlay_menu" :model="addItems(toast)" :popup="true" />
 
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 10px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
+        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
+        <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast)" />
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
@@ -65,7 +66,7 @@ import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
 import { calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler, refresh } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
