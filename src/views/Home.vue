@@ -13,7 +13,7 @@
       </div>
       <div class="tools">
         <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
-        <Menu ref="menu" id="overlay_menu" :model="addItems(toast)" :popup="true" />
+        <Menu ref="menu" id="overlay_menu" :model="addItems(toast, fileUploader)" :popup="true" />
 
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
@@ -55,6 +55,7 @@
   <Delete />
   <Drawer :visiable="drawer().showDrawer" />
   <Progress class="progress_component" />
+  <input type="file" multiple style="display: none;" ref="fileUploader">
 </template>
 
 <script lang="ts" setup>
@@ -66,7 +67,7 @@ import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
 import { calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler, refresh } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler, refresh, uploadFiles } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -85,6 +86,18 @@ const menu = ref();
 function addButtons(event: any){
   menu.value.toggle(event);
 }
+
+const fileUploader=ref();
+onMounted(()=>{
+  if(fileUploader.value){
+    fileUploader.value.addEventListener('change', (event: any) => {
+      const target = event.currentTarget as HTMLInputElement;
+      if (target.files && target.files.length > 0) {
+        uploadFiles(target.files, toast);
+      }
+    });
+  }
+})
 
 
 onMounted(async ()=>{

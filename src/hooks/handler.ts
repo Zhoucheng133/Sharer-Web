@@ -122,25 +122,11 @@ export function menuDelHandler(event: any, confirm: any, toast: any, item?: File
   });
 }
 
-export function uploadHandler(toast: any){
-  const input = document.createElement('input');
-  input.type = 'file';
-  input.accept = '*/*';
-  input.multiple = true;
-  input.style.display = 'none';
-  input.addEventListener('change', (event) => {
-    const target = event.currentTarget as HTMLInputElement;
-    if (target.files && target.files.length > 0) {
-      uploadFiles(target.files, toast);
-    }
-  });
-  document.body.appendChild(input);
-  input.click();
-  input.remove();
-
+function uploadHandler(fileUploader: any){
+  fileUploader.click();
 }
 
-function uploadFiles(files: FileList, toast: any) {
+export function uploadFiles(files: FileList, toast: any) {
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -149,10 +135,14 @@ function uploadFiles(files: FileList, toast: any) {
   if(progress().panelHeight==50){
     progress().togglePanel();
   }
+  
   axios.post(`${hostname}/api/upload`, formData, {
     headers: {
       'Content-Type': 'multipart/form-data',
-      token: store().token
+      token: store().token,
+    },
+    params: {
+      path: encodeURIComponent(store().pathResolve),
     },
     onUploadProgress: (progressEvent: any) => {
       let index=progress().uploadList.findIndex((item)=>item.id==id);
@@ -198,7 +188,7 @@ export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
 }
 
-export const addItems=(toast: any)=>{
+export const addItems=(toast: any, fileUploader: any)=>{
   return [
     {
       label: '添加',
@@ -206,7 +196,7 @@ export const addItems=(toast: any)=>{
         {
           label: '上传文件',
           icon: 'pi pi-file',
-          command: ()=>uploadHandler(toast)
+          command: ()=>uploadHandler(fileUploader)
         },
         {
           label: '上传文件夹',
