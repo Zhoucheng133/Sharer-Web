@@ -13,7 +13,7 @@
       </div>
       <div class="tools">
         <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
-        <Menu ref="menu" id="overlay_menu" :model="addItems(toast, fileUploader)" :popup="true" />
+        <Menu ref="menu" id="overlay_menu" :model="addItems(fileUploader, dirUploader)" :popup="true" />
 
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
@@ -56,6 +56,7 @@
   <Drawer :visiable="drawer().showDrawer" />
   <Progress class="progress_component" />
   <input type="file" multiple style="display: none;" ref="fileUploader">
+  <input type="file" multiple webkitdirectory directory style="display: none;" ref="dirUploader">
 </template>
 
 <script lang="ts" setup>
@@ -88,6 +89,7 @@ function addButtons(event: any){
 }
 
 const fileUploader=ref();
+const dirUploader=ref();
 onMounted(()=>{
   if(fileUploader.value){
     fileUploader.value.addEventListener('change', (event: any) => {

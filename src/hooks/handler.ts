@@ -175,8 +175,12 @@ export function uploadFiles(files: FileList, toast: any) {
   });
 }
 
-export function uploadFolderHandler(toast: any){
-  toast.add({ severity: 'info', summary: '未完成的功能', detail: 'TODO', life: 2000 });
+function uploadFolderHandler(dirUploader: any){
+  dirUploader.click();
+}
+
+export function uploadFolder(){
+  // TODO 
 }
 
 export function renameHandler(file: FileItem){
@@ -188,7 +192,7 @@ export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
 }
 
-export const addItems=(toast: any, fileUploader: any)=>{
+export const addItems=(fileUploader: any, dirUploader: any)=>{
   return [
     {
       label: '添加',
@@ -201,7 +205,7 @@ export const addItems=(toast: any, fileUploader: any)=>{
         {
           label: '上传文件夹',
           icon: 'pi pi-folder',
-          command: ()=>uploadFolderHandler(toast)
+          command: ()=>uploadFolderHandler(dirUploader)
         },
         {
           label: '新建文件夹',
