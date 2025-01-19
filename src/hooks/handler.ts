@@ -155,10 +155,15 @@ function uploadFiles(files: FileList, toast: any) {
       let index=progress().uploadList.findIndex((item)=>item.id==id);
       const count=files.length;
       if(index==-1){
+        let totalSize = 0;
+        for (const file of files) {
+            totalSize += file.size;
+        }
         progress().uploadList.push({
           id: id,
           name: count==1 ? files[0].name : `${files[0].name}等文件`,
-          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
+          size: totalSize
         })
       }else{
         progress().uploadList[index]={

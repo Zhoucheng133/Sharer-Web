@@ -5,6 +5,7 @@ export interface UploadItem{
   id: string, // nanoid()
   name: string,
   progress: number // 0~100
+  size: number
 }
 
 export default defineStore("progress", ()=>{
