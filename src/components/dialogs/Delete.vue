@@ -17,6 +17,7 @@ import hostname from '../../hooks/hostname';
 import store from '../../hooks/store';
 import { getList } from '../../hooks/handler';
 import dialogs from '../../hooks/dialogs';
+import selector from '../../hooks/selector';
 const toast=useToast()
 
 const del=async ()=>{
@@ -32,6 +33,9 @@ const del=async ()=>{
     toast.add({ severity: 'success', summary: '操作成功', detail: "已删除文件(夹)", life: 2000 });
     getList();
     dialogs().showDelDialog=false;
+    selector().selectAll=false;
+    selector().selectedFile=[];
+    selector().indeterminate=false;
   }else{
     toast.add({ severity: 'error', summary: '删除失败', detail: response.msg, life: 2000 });
   }
