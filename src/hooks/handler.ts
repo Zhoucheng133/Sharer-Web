@@ -273,4 +273,5 @@ export async function refresh(toast: any){
 
 export function toggleHide(){
   store().showHide=!store().showHide;
+  localStorage.setItem("showHide", store().showHide ? "true" : "false");
 }

@@ -92,6 +92,7 @@ function addButtons(event: any){
 const fileUploader=ref();
 const dirUploader=ref();
 onMounted(()=>{
+  store().showHide=localStorage.getItem("showHide")=='true' ? true : false
   if(fileUploader.value){
     fileUploader.value.addEventListener('change', (event: any) => {
       const target = event.currentTarget as HTMLInputElement;
