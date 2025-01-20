@@ -68,7 +68,7 @@ import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
 import { calSize } from '../hooks/static';
 import FileIcon from '../components/FileIcon.vue';
 import selector from '../hooks/selector';
-import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler, refresh, uploadFiles } from '../hooks/handler';
+import { clickHanlder, pathHandler, downloadHandler, getList, menuDelHandler, delHandler, addItems, renameHandler, refresh, uploadFiles, uploadFolder } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -98,6 +98,15 @@ onMounted(()=>{
         uploadFiles(target.files, toast, target);
       }
     });
+  }
+  if(dirUploader.value){
+    dirUploader.value.addEventListener('change', (event: any)=>{
+      const target = event.currentTarget as HTMLInputElement; 
+      if(target.files && target.files.length>0){
+        uploadFolder(target.files, toast, target);
+      }
+      
+    })
   }
 })
 

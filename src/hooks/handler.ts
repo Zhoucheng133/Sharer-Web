@@ -180,8 +180,56 @@ function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(){
-  // TODO 
+export function uploadFolder(files: FileList, toast: any, target: any){
+  if(progress().panelHeight==50){
+    progress().togglePanel();
+  }
+  const formData = new FormData();
+  for (const file of files) {
+    formData.append('files', file);
+    formData.append('paths', file.webkitRelativePath);
+  }
+  const id=nanoid();
+  axios.post(`${hostname}/api/uploadFolder`, formData, {
+    headers: {
+      token: store().token
+    },
+    params: {
+      path: encodeURIComponent(store().pathResolve),
+    },
+    onUploadProgress: (progressEvent: any) => {
+      let index=progress().uploadList.findIndex((item)=>item.id==id);
+      const firstFile = files[0];
+      const relativePath = firstFile.webkitRelativePath;
+      const basePath = relativePath.split('/')[0];
+      if(index==-1){
+        let totalSize = 0;
+        for (const file of files) {
+            totalSize += file.size;
+        }
+        progress().uploadList.push({
+          id: id,
+          // name: count==1 ? files[0].name : `${files[0].name}等文件`,
+          name: basePath,
+          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
+          size: totalSize
+        })
+        target.value = '';
+      }else{
+        progress().uploadList[index]={
+          ...progress().uploadList[index],
+          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+        }
+      }
+    },
+  })
+  .then(_ => {
+    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    getList();
+  })
+  .catch(error => {
+    toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+  });
 }
 
 export function renameHandler(file: FileItem){
