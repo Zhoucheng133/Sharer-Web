@@ -7,7 +7,7 @@ export function calSize(file: FileItem){
   if(file.size==0){
     return "0 Bytes"
   }
-  const units = ["Bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
+  const units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const k = 1024;
   const i = Math.floor(Math.log(file.size) / Math.log(k));
   const value = (file.size / Math.pow(k, i)).toFixed(2);
