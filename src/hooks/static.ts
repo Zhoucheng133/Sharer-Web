@@ -5,7 +5,7 @@ export function calSize(file: FileItem){
     return "";
   }
   if(file.size==0){
-    return "0 Bytes"
+    return "0 B";
   }
   const units = ["B", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB"];
   const k = 1024;

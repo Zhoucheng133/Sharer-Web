@@ -42,7 +42,7 @@
         <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="renameHandler(item)" />
         <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler(item)" />
       </div>
-      <div class="file_label" @click="clickHanlder(item)">{{ calSize(item) }}</div>
+      <div class="file_label" @click="clickHanlder(item)" style="text-align: right;">{{ calSize(item) }}</div>
       <div class="file_option_m">
         <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" style="height: 30px; width: 30px;" @click="drawer().toggleDrawer(item)" />
       </div>
