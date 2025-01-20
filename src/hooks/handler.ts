@@ -270,3 +270,7 @@ export async function refresh(toast: any){
   await getList();
   toast.add({ severity: 'success', summary: '刷新成功', detail: '已重新加载文件列表', life: 2000 });
 }
+
+export function toggleHide(){
+  store().showHide=!store().showHide;
+}
