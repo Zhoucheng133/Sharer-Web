@@ -30,7 +30,8 @@
         <div></div>
       </div>
     </div>
-    <Item v-for="(item, index) in store().list" :key="index" :item="item" />
+    <Item v-for="(item, index) in store().list" :key="index" :item="item" @contextmenu="showMenu($event, item)" />
+    <ContextMenu ref="menu" :model="menuItems" />
     <div style="height: 50px;"></div>
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
@@ -47,10 +48,10 @@
 import { onMounted, ref } from 'vue';
 import { checkAuth } from '../hooks/auth';
 import "../styles/home.css";
-import store from '../hooks/store';
-import { Button, Checkbox, ConfirmPopup, Toast, Menu} from 'primevue';
+import store, { type FileItem } from '../hooks/store';
+import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
 import selector from '../hooks/selector';
-import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide } from '../hooks/handler';
+import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -62,6 +63,41 @@ import Rename from '../components/dialogs/Rename.vue';
 import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
 import Item from '../components/Item.vue';
+
+const selectMenu=ref<FileItem>({
+  name: '',
+  size: 0,
+  isDir: false,
+  selected: false
+});
+
+const menuItems=ref([
+  {
+    label: '打开', 
+    icon: selectMenu.value.isDir ? 'pi pi-folder-open' : 'pi pi-file',
+    command: ()=>clickHanlder(selectMenu.value)
+  },
+  {
+    label: '重命名',
+    icon: 'pi pi-pen-to-square',
+    command: ()=>renameHandler(selectMenu.value)
+  },
+  {
+    label: '下载',
+    icon: 'pi pi-download',
+    command: ()=>downloadHandler(selectMenu.value)
+  },
+  {
+    label: '删除',
+    icon: 'pi pi-trash',
+    command: ()=>delHandler(selectMenu.value)
+  },
+])
+
+const showMenu=(event: any, item: FileItem)=>{
+  selectMenu.value=item;
+  menu.value.show(event);
+}
 
 const confirm = useConfirm();
 const toast = useToast();
