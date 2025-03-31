@@ -30,24 +30,7 @@
         <div></div>
       </div>
     </div>
-    <div class="file_item" v-for="(item, index) in store().list" :key="index">
-      <div class="file_label" style="display: flex; justify-content: center;">
-        <Checkbox v-model="item.selected" binary size="small" @change="()=>selector().selectChange(item)" />
-      </div>
-      <div @click="clickHanlder(item)">
-        <FileIcon :file="item" />
-      </div>
-      <div class="file_label" @click="clickHanlder(item)">{{ item.name }}</div>
-      <div class="file_option">
-        <Button icon="pi pi-download" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px;" @click="downloadHandler(item)" />
-        <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="renameHandler(item)" />
-        <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" style="height: 30px; width: 30px; margin-left: 5px;" @click="delHandler(item)" />
-      </div>
-      <div class="file_label" @click="clickHanlder(item)" style="text-align: right;">{{ calSize(item) }}</div>
-      <div class="file_option_m">
-        <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" style="height: 30px; width: 30px;" @click="drawer().toggleDrawer(item)" />
-      </div>
-    </div>
+    <Item v-for="(item, index) in store().list" :key="index" :item="item" />
     <div style="height: 50px;"></div>
   </div>
   <Preview class="preview" v-if="preview().previewFile.length!=0"/>
@@ -80,6 +63,7 @@ import drawer from '../hooks/drawer';
 import Rename from '../components/dialogs/Rename.vue';
 import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
+import Item from '../components/Item.vue';
 
 const confirm = useConfirm();
 const toast = useToast();
