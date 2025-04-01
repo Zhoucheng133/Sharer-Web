@@ -13,7 +13,7 @@
       </div>
       <div class="tools">
         <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
-        <Menu ref="menu" id="overlay_menu" :model="addItems(fileUploader, dirUploader)" :popup="true" />
+        <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader)" :popup="true" />
 
         <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
         <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
@@ -103,8 +103,9 @@ const confirm = useConfirm();
 const toast = useToast();
 
 const menu = ref();
+const add=ref();
 function addButtons(event: any){
-  menu.value.toggle(event);
+  add.value.toggle(event);
 }
 
 const fileUploader=ref();
