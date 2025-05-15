@@ -48,7 +48,7 @@ export function getFileType(name: string): Types{
     return Types.Bt;
   }else if(extName(name, 'html')){
     return Types.Html;
-  }else if(extName(name, 'png', 'jpeg', 'jpg', 'gif', 'svg')){
+  }else if(extName(name, 'png', 'jpeg', 'jpg', 'gif', 'svg', 'webp')){
     return Types.Image;
   }else if(extName(name, 'pdf')){
     return Types.Pdf;
