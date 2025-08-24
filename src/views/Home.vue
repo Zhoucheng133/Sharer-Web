@@ -51,7 +51,7 @@ import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
 import selector from '../hooks/selector';
-import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler } from '../hooks/handler';
+import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler, readAllFilesFromDirectory, readFile } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -110,7 +110,9 @@ function addButtons(event: any){
 
 const fileUploader=ref();
 const dirUploader=ref();
-onMounted(()=>{
+
+
+onMounted(async ()=>{
   store().showHide=localStorage.getItem("showHide")=='true' ? true : false
   if(fileUploader.value){
     fileUploader.value.addEventListener('change', (event: any) => {
@@ -129,13 +131,68 @@ onMounted(()=>{
       
     })
   }
-})
-
-
-onMounted(async ()=>{
   const isAuth=await checkAuth(true);
   if(isAuth){
     getList();
   }
+  window.addEventListener("dragenter", onDragEnter);
+  window.addEventListener("dragover", onDragOver);
+  window.addEventListener("dragleave", onDragLeave);
+  window.addEventListener("drop", onDrop);
 })
+
+const dragCounter = ref(0);
+const isDragging=ref(false);
+
+const onDragEnter=(e: any)=>{
+  dragCounter.value++;
+  isDragging.value = true;
+  e.preventDefault();
+}
+
+const onDragOver=(e: any)=>{
+  e.preventDefault();
+}
+
+const onDragLeave=()=>{
+  dragCounter.value--;
+  if (dragCounter.value === 0) {
+    isDragging.value = false;
+  }
+}
+
+const onDrop=async (e: any)=>{
+  e.preventDefault();
+  dragCounter.value = 0;
+  isDragging.value = false;
+  if (e.dataTransfer.files.length > 0) {
+    const items = e.dataTransfer?.items;
+    if (!items) return;
+
+    let fileList: File[] = [];
+
+    for (const item of items) {
+      const entry = (item as any).webkitGetAsEntry?.();
+      if (entry) {
+        if (entry.isDirectory) {
+          const files = await readAllFilesFromDirectory(entry);
+          fileList.push(...files);
+          // ～转换和上传
+          const dataTransfer = new DataTransfer();
+          fileList.forEach((file) => dataTransfer.items.add(file));
+          uploadFolder(dataTransfer.files, toast, null);
+        } else if (entry.isFile) {
+          const file = await readFile(entry);
+          fileList.push(file);
+          // ～转换和上传
+          const dataTransfer = new DataTransfer();
+          fileList.forEach((file) => dataTransfer.items.add(file));
+          uploadFiles(dataTransfer.files, toast, null);
+        }
+      }
+    }
+  }
+}
+
+
 </script>

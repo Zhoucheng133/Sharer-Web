@@ -126,7 +126,7 @@ function uploadHandler(fileUploader: any){
   fileUploader.click();
 }
 
-export function uploadFiles(files: FileList, toast: any, target: any) {
+export function uploadFiles(files: FileList, toast: any, target: HTMLInputElement | null) {
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -158,7 +158,9 @@ export function uploadFiles(files: FileList, toast: any, target: any) {
           progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
           size: totalSize
         })
-        target.value = '';
+        if(target!=null){
+          target.value = '';
+        }
       }else{
         progress().uploadList[index]={
           ...progress().uploadList[index],
@@ -180,7 +182,7 @@ function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(files: FileList, toast: any, target: any){
+export function uploadFolder(files: FileList, toast: any, target: HTMLInputElement | null){
   if(progress().panelHeight==50){
     progress().togglePanel();
   }
@@ -214,7 +216,9 @@ export function uploadFolder(files: FileList, toast: any, target: any){
           progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
           size: totalSize
         })
-        target.value = '';
+        if(target!=null){
+          target.value = '';
+        }
       }else{
         progress().uploadList[index]={
           ...progress().uploadList[index],
@@ -274,4 +278,43 @@ export async function refresh(toast: any){
 export function toggleHide(){
   store().showHide=!store().showHide;
   localStorage.setItem("showHide", store().showHide ? "true" : "false");
+}
+
+export function readAllFilesFromDirectory(entry: any): Promise<File[]> {
+  return new Promise((resolve, reject) => {
+    const reader = entry.createReader();
+    let allFiles: File[] = [];
+
+    function readBatch() {
+      reader.readEntries(async (entries: any[]) => {
+        if (entries.length === 0) {
+          resolve(allFiles);
+          return;
+        }
+
+        for (const entry of entries) {
+          if (entry.isFile) {
+            const file = await readFile(entry);
+            // 给 file 手动添加 webkitRelativePath
+            Object.defineProperty(file, "webkitRelativePath", {
+              value: entry.fullPath.replace(/^\//, ""), // 去掉最前面的 "/"
+            });
+            allFiles.push(file);
+          } else if (entry.isDirectory) {
+            const subFiles = await readAllFilesFromDirectory(entry);
+            allFiles.push(...subFiles);
+          }
+        }
+        readBatch();
+      }, reject);
+    }
+
+    readBatch();
+  });
+}
+
+export function readFile(entry: any): Promise<File> {
+  return new Promise((resolve, reject) => {
+    entry.file((file: File) => resolve(file), reject);
+  });
 }
