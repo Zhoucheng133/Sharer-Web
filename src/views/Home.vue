@@ -1,4 +1,5 @@
 <template>
+  <Drag class="drag_view" v-if="isDragging" />
   <Toast />
   <ConfirmPopup />
   <div class="page">
@@ -63,6 +64,7 @@ import Rename from '../components/dialogs/Rename.vue';
 import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
 import Item from '../components/Item.vue';
+import Drag from '../components/Drag.vue';
 
 const selectMenu=ref<FileItem>({
   name: '',
