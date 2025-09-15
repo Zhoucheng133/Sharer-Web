@@ -53,7 +53,7 @@ import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
 import selector from '../hooks/selector';
-import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler, readAllFilesFromDirectory, readFile } from '../hooks/handler';
+import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler, readAllFilesFromDirectory, readFile, mkdirHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -79,6 +79,13 @@ const bodyMenuItems=ref([
     label: "刷新",
     icon: 'pi pi-refresh',
     command: ()=>refresh(toast)
+  },
+  {
+    label: "新建文件夹",
+    icon: "pi pi-folder-plus",
+    command: ()=>{
+      mkdirHandler()
+    }
   },
   {
     label: "上传文件",
