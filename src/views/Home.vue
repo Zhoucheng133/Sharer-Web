@@ -43,6 +43,7 @@
   <Progress class="progress_component" />
   <input type="file" multiple style="display: none;" ref="fileUploader">
   <input type="file" multiple webkitdirectory directory style="display: none;" ref="dirUploader">
+  <ContextMenu ref="pageMenu" :model="bodyMenuItems" />
 </template>
 
 <script lang="ts" setup>
@@ -72,6 +73,28 @@ const selectMenu=ref<FileItem>({
   isDir: false,
   selected: false
 });
+
+const bodyMenuItems=ref([
+  {
+    label: "刷新",
+    icon: 'pi pi-refresh',
+    command: ()=>refresh(toast)
+  },
+  {
+    label: "上传文件",
+    icon: 'pi pi-file-arrow-up',
+    command: ()=>{
+      fileUploader.value.click();
+    }
+  },
+  {
+    label: "上传文件夹",
+    icon: 'pi pi-upload',
+    command: ()=>{
+      dirUploader.value.click();
+    }
+  }
+])
 
 const menuItems=ref([
   {
@@ -105,6 +128,7 @@ const confirm = useConfirm();
 const toast = useToast();
 
 const menu = ref();
+const pageMenu=ref();
 const add=ref();
 function addButtons(event: any){
   add.value.toggle(event);
@@ -113,8 +137,13 @@ function addButtons(event: any){
 const fileUploader=ref();
 const dirUploader=ref();
 
+const showBodyMenu=(event: any)=>{
+  event.preventDefault();
+  pageMenu.value.show(event);
+}
 
 onMounted(async ()=>{
+  document.body.addEventListener("contextmenu", showBodyMenu);
   store().showHide=localStorage.getItem("showHide")=='true' ? true : false
   if(fileUploader.value){
     fileUploader.value.addEventListener('change', (event: any) => {
