@@ -2,7 +2,7 @@
   <div class="bg">
     <div class="drag_box">
       <i class="pi pi-cloud-upload icon"></i>
-      <div class="label">拖拽上传 (不要混合文件与文件夹)</div>
+      <div class="label">拖拽上传</div>
     </div>
   </div>
 </template>

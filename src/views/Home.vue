@@ -199,38 +199,55 @@ const onDragLeave=()=>{
   }
 }
 
-const onDrop=async (e: any)=>{
+const onDrop = async (e: DragEvent) => {
   e.preventDefault();
   dragCounter.value = 0;
   isDragging.value = false;
-  if (e.dataTransfer.files.length > 0) {
-    const items = e.dataTransfer?.items;
-    if (!items) return;
 
-    let fileList: File[] = [];
+  if (!e.dataTransfer?.items || e.dataTransfer.items.length === 0) return;
 
-    for (const item of items) {
-      const entry = (item as any).webkitGetAsEntry?.();
-      if (entry) {
-        if (entry.isDirectory) {
-          const files = await readAllFilesFromDirectory(entry);
-          fileList.push(...files);
-          // ～转换和上传
-          const dataTransfer = new DataTransfer();
-          fileList.forEach((file) => dataTransfer.items.add(file));
-          uploadFolder(dataTransfer.files, toast, null);
-        } else if (entry.isFile) {
-          const file = await readFile(entry);
-          fileList.push(file);
-          // ～转换和上传
-          const dataTransfer = new DataTransfer();
-          fileList.forEach((file) => dataTransfer.items.add(file));
-          uploadFiles(dataTransfer.files, toast, null);
-        }
-      }
+  const items = Array.from(e.dataTransfer.items);
+
+  const filePromises: Promise<File>[] = [];
+  const folderPromises: Promise<File[]>[] = [];
+
+  for (const item of items) {
+    const entry = (item as any).webkitGetAsEntry?.();
+    if (!entry) continue;
+
+    if (entry.isDirectory) {
+      folderPromises.push(readAllFilesFromDirectory(entry));
+    } else if (entry.isFile) {
+      filePromises.push(readFile(entry));
     }
   }
-}
+
+  // 等待所有文件和目录读取完成
+  const fileResults = await Promise.all(filePromises);
+  const folderResults = await Promise.all(folderPromises);
+
+  const allFilesFromFolders = folderResults.flat();
+  const allFiles = [...fileResults, ...allFilesFromFolders];
+
+  if (allFiles.length > 0) {
+    const dataTransfer = new DataTransfer();
+    allFiles.forEach((file) => dataTransfer.items.add(file));
+
+    // 分别上传文件和目录
+    if (fileResults.length > 0) {
+      const fileDT = new DataTransfer();
+      fileResults.forEach((file) => fileDT.items.add(file));
+      uploadFiles(fileDT.files, toast, null);
+    }
+
+    if (folderResults.length > 0) {
+      const folderDT = new DataTransfer();
+      allFilesFromFolders.forEach((file) => folderDT.items.add(file));
+      uploadFolder(folderDT.files, toast, null);
+    }
+  }
+};
+
 
 
 </script>
