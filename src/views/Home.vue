@@ -222,7 +222,6 @@ const onDrop = async (e: DragEvent) => {
     }
   }
 
-  // 等待所有文件和目录读取完成
   const fileResults = await Promise.all(filePromises);
   const folderResults = await Promise.all(folderPromises);
 
@@ -237,14 +236,15 @@ const onDrop = async (e: DragEvent) => {
     if (fileResults.length > 0) {
       const fileDT = new DataTransfer();
       fileResults.forEach((file) => fileDT.items.add(file));
-      uploadFiles(fileDT.files, toast, null);
+      uploadFiles(fileDT.files, toast, null, false);
     }
 
     if (folderResults.length > 0) {
       const folderDT = new DataTransfer();
       allFilesFromFolders.forEach((file) => folderDT.items.add(file));
-      uploadFolder(folderDT.files, toast, null);
+      uploadFolder(folderDT.files, toast, null, false);
     }
+    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件 (目录)', life: 2000 });
   }
 };
 

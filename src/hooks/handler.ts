@@ -126,7 +126,7 @@ function uploadHandler(fileUploader: any){
   fileUploader.click();
 }
 
-export function uploadFiles(files: FileList, toast: any, target: HTMLInputElement | null) {
+export function uploadFiles(files: FileList, toast: any, target: HTMLInputElement | null, showToast: boolean=true) {
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -170,11 +170,15 @@ export function uploadFiles(files: FileList, toast: any, target: HTMLInputElemen
     },
   })
   .then(_ => {
-    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    if(showToast){
+      toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    }
     getList();
   })
   .catch(error => {
-    toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+    if(showToast){
+      toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+    }
   });
 }
 
@@ -182,7 +186,7 @@ function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(files: FileList, toast: any, target: HTMLInputElement | null){
+export function uploadFolder(files: FileList, toast: any, target: HTMLInputElement | null, showToast: boolean=true){
   if(progress().panelHeight==50){
     progress().togglePanel();
   }
@@ -228,11 +232,15 @@ export function uploadFolder(files: FileList, toast: any, target: HTMLInputEleme
     },
   })
   .then(_ => {
-    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    if(showToast){
+      toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+    }
     getList();
   })
   .catch(error => {
-    toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+    if(showToast){
+      toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+    }
   });
 }
 
