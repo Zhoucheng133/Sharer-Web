@@ -1,7 +1,7 @@
 <template>
   <Dialog v-model:visible="dialogs.showMkdirDialog" modal :header="t('createFolder')" :style="{ width: '25rem' }">
     <div class="flex items-center gap-4 mb-4">
-      <InputText style="margin-top: 10px;" autocomplete="off" size="small" :placeholder="t('inputFolder')" v-model="name" :autofocus="true" />
+      <InputText style="margin-top: 10px;" autocomplete="off" size="small" :placeholder="t('inputFolder')" v-model="name" :autofocus="true" @keyup.enter="create" />
     </div>
     <div class="flex justify-end gap-2">
       <Button type="button" :label="t('cancel')" severity="secondary" size="small" @click="cancel"></Button>
