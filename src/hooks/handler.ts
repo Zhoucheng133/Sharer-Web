@@ -186,16 +186,32 @@ function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean=true){
-  if(progress().panelHeight==50){
+export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean = true) {
+  if (files.length === 0) return;
+
+  if (progress().panelHeight == 50) {
     progress().togglePanel();
   }
+
+  const firstFile = files[0];
+  const relativePath = firstFile.webkitRelativePath;
+  const basePath = relativePath.split('/')[0];
+  
+  let totalSize = 0;
   const formData = new FormData();
+  
   for (const file of files) {
     formData.append('files', file);
     formData.append('paths', file.webkitRelativePath);
+    totalSize += file.size;
   }
-  const id=nanoid();
+
+  if (target != null) {
+    target.value = ''; 
+  }
+
+  const id = nanoid();
+  
   axios.post(`${hostname}/api/uploadFolder`, formData, {
     headers: {
       token: store().token
@@ -204,42 +220,33 @@ export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLIn
       path: encodeURIComponent(store().pathResolve),
     },
     onUploadProgress: (progressEvent: any) => {
-      let index=progress().uploadList.findIndex((item)=>item.id==id);
-      const firstFile = files[0];
-      const relativePath = firstFile.webkitRelativePath;
-      const basePath = relativePath.split('/')[0];
-      if(index==-1){
-        let totalSize = 0;
-        for (const file of files) {
-            totalSize += file.size;
-        }
+      let index = progress().uploadList.findIndex((item) => item.id == id);
+      const currentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+
+      if (index == -1) {
         progress().uploadList.push({
           id: id,
-          // name: count==1 ? files[0].name : `${files[0].name}等文件`,
           name: basePath,
-          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
+          progress: currentProgress,
           size: totalSize
-        })
-        if(target!=null){
-          target.value = '';
-        }
-      }else{
-        progress().uploadList[index]={
+        });
+      } else {
+        progress().uploadList[index] = {
           ...progress().uploadList[index],
-          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
-        }
+          progress: currentProgress
+        };
       }
     },
   })
   .then(_ => {
-    if(showToast){
+    if (showToast) {
       toast.add({ severity: 'success', summary: t("uploadSuccess"), detail: t("uploadDone"), life: 2000 });
     }
     getList();
   })
   .catch(error => {
-    if(showToast){
-      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error, life: 2000 });
+    if (showToast) {
+      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error.message || error, life: 2000 });
     }
   });
 }
