@@ -1,11 +1,11 @@
 <template>
-  <Dialog v-model:visible="showRenameDialog" modal header="重命名文件" :style="{ width: '25rem' }">
+  <Dialog v-model:visible="showRenameDialog" modal :header="t('rename')" :style="{ width: '25rem' }">
     <div class="flex items-center gap-4 mb-4">
-      <InputText style="margin-top: 10px;" autocomplete="off" size="small" placeholder="新的文件(夹)名" v-model="name" />
+      <InputText style="margin-top: 10px;" autocomplete="off" size="small" :placeholder="t('newName')" v-model="name" :autofocus="true" />
     </div>
     <div class="flex justify-end gap-2">
-      <Button type="button" label="取消" severity="secondary" size="small" @click="cancel"></Button>
-      <Button type="button" label="重命名" size="small" @click="rename"></Button>
+      <Button type="button" :label="t('cancel')" severity="secondary" size="small" @click="cancel"></Button>
+      <Button type="button" :label="t('rename')" size="small" @click="rename"></Button>
     </div>
   </Dialog>
 </template>
@@ -19,6 +19,9 @@ import hostname from '../../hooks/hostname';
 import store from '../../hooks/store';
 import { getList } from '../../hooks/handler';
 import { storeToRefs } from 'pinia';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 const toast=useToast()
 
 let name=ref();

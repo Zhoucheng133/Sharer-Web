@@ -3,7 +3,7 @@
     <div class="preview_title_bar">
       <div class="preview_title">{{ preview().previewFile }}</div>
       <div class="preview_tools">
-        <Button label="下载" size="small" style="margin-right: 10px;" @click="preview().download" />
+        <Button :label="t('download')" size="small" style="margin-right: 10px;" @click="preview().download" />
         <Button icon="pi pi-times" variant="text" rounded aria-label="Filter" size="small" @click="preview().closePreview" />
       </div>
     </div>
@@ -45,6 +45,8 @@ import { onMounted, ref } from "vue";
 import preview from "../hooks/preview";
 import { getAsset, Types } from "../hooks/static";
 import { Button } from "primevue";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 const playerContainer=ref(null);
 
 window.addEventListener("keydown", (e)=>{

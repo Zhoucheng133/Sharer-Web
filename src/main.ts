@@ -9,14 +9,33 @@ import ToastService from 'primevue/toastservice';
 import router from "./router/index";
 import { createPinia } from 'pinia';
 import ConfirmationService from 'primevue/confirmationservice';
+import { createI18n } from 'vue-i18n';
+import zhCN from './i18n/zh_cn.ts';
+import enUS from './i18n/en_us.ts';
+import zhTW from './i18n/zh_tw.ts';
 
 const app = createApp(App);
 const pinia = createPinia()
+const userLang = navigator.language;
+
+const i18n=createI18n({
+  legacy: false,
+  locale: userLang,
+  fallbackLocale: 'en-US',
+  missingWarn: false,
+  fallbackWarn: false,
+  messages: {
+    "zh-CN": zhCN,
+    "en-US": enUS,
+    "zh-TW": zhTW,
+  }
+})
 
 app.use(ToastService);
 app.use(ConfirmationService);
 app.use(router);
 app.use(pinia);
+app.use(i18n)
 
 const primaryColor="cyan";
 

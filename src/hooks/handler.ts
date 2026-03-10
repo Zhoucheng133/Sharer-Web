@@ -82,22 +82,22 @@ export function delHandler(item: FileItem){
   dialogs().showDelDialog=true;
 }
 
-export function menuDelHandler(event: any, confirm: any, toast: any, item?: FileItem){
+export function menuDelHandler(event: any, confirm: any, toast: any, t: any, item?: FileItem){
   if(!item && selector().selectedFile.length==0){
     return;
   }
   let files= item ? [item.name] : selector().selectedFile.map((item)=>item.name);
   confirm.require({
     target: event.currentTarget,
-    message: '你确定要删除吗',
+    message: t("confirmDeleteQ"),
     icon: 'pi pi-exclamation-triangle',
     rejectProps: {
-      label: '取消',
+      label: t("cancel"),
       severity: 'secondary',
       outlined: true
     },
     acceptProps: {
-      label: '删除',
+      label: t("delete"),
       severity: 'danger'
     },
     accept: async () => {
@@ -110,13 +110,13 @@ export function menuDelHandler(event: any, confirm: any, toast: any, item?: File
         }
       })
       if(response.ok){
-        toast.add({ severity: 'success', summary: '操作成功', detail: "已删除文件(夹)", life: 2000 });
+        toast.add({ severity: 'success', summary: t('opOk'), detail: t('deleteOk'), life: 2000 });
         selector().selectAll=false;
         selector().indeterminate=false;
         selector().selectedFile=[];
         getList();
       }else{
-        toast.add({ severity: 'error', summary: '删除失败', detail: response.msg, life: 2000 });
+        toast.add({ severity: 'error', summary: t("deleteFail"), detail: response.msg, life: 2000 });
       }
     },
   });
@@ -126,7 +126,7 @@ function uploadHandler(fileUploader: any){
   fileUploader.click();
 }
 
-export function uploadFiles(files: FileList, toast: any, target: HTMLInputElement | null, showToast: boolean=true) {
+export function uploadFiles(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean=true ){
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -154,7 +154,7 @@ export function uploadFiles(files: FileList, toast: any, target: HTMLInputElemen
         }
         progress().uploadList.push({
           id: id,
-          name: count==1 ? files[0].name : `${files[0].name}等文件`,
+          name: count==1 ? files[0].name : `${files[0].name}${t("etc")}`,
           progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
           size: totalSize
         })
@@ -171,13 +171,13 @@ export function uploadFiles(files: FileList, toast: any, target: HTMLInputElemen
   })
   .then(_ => {
     if(showToast){
-      toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+      toast.add({ severity: 'success', summary: t("uploadSuccess"), detail: t("uploadDone"), life: 2000 });
     }
     getList();
   })
   .catch(error => {
     if(showToast){
-      toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error, life: 2000 });
     }
   });
 }
@@ -186,7 +186,7 @@ function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(files: FileList, toast: any, target: HTMLInputElement | null, showToast: boolean=true){
+export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean=true){
   if(progress().panelHeight==50){
     progress().togglePanel();
   }
@@ -233,13 +233,13 @@ export function uploadFolder(files: FileList, toast: any, target: HTMLInputEleme
   })
   .then(_ => {
     if(showToast){
-      toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件', life: 2000 });
+      toast.add({ severity: 'success', summary: t("uploadSuccess"), detail: t("uploadDone"), life: 2000 });
     }
     getList();
   })
   .catch(error => {
     if(showToast){
-      toast.add({ severity: 'error', summary: '上传失败', detail: error, life: 2000 });
+      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error, life: 2000 });
     }
   });
 }
@@ -253,23 +253,23 @@ export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
 }
 
-export const addItems=(fileUploader: any, dirUploader: any)=>{
+export const addItems=(fileUploader: any, dirUploader: any, t: any)=>{
   return [
     {
       label: '添加',
       items: [
         {
-          label: '上传文件',
+          label: t("uploadFile"),
           icon: 'pi pi-file',
           command: ()=>uploadHandler(fileUploader)
         },
         {
-          label: '上传文件夹',
+          label: t("uploadFolder"),
           icon: 'pi pi-folder',
           command: ()=>uploadFolderHandler(dirUploader)
         },
         {
-          label: '新建文件夹',
+          label: t("createFolder"),
           icon: 'pi pi-folder-plus',
           command: ()=>mkdirHandler()
         }
@@ -278,9 +278,9 @@ export const addItems=(fileUploader: any, dirUploader: any)=>{
   ]
 }
 
-export async function refresh(toast: any){
+export async function refresh(toast: any, t: any){
   await getList();
-  toast.add({ severity: 'success', summary: '刷新成功', detail: '已重新加载文件列表', life: 2000 });
+  toast.add({ severity: 'success', summary: t("refreshSuccess"), detail: t("refreshDone"), life: 2000 });
 }
 
 export function toggleHide(){

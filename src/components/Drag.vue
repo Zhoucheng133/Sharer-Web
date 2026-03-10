@@ -2,10 +2,15 @@
   <div class="bg">
     <div class="drag_box">
       <i class="pi pi-cloud-upload icon"></i>
-      <div class="label">拖拽上传</div>
+      <div class="label">{{ t('dragToUpload') }}</div>
     </div>
   </div>
 </template>
+
+<script lang="ts" setup>
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
+</script>
 
 <style scoped>
 .label{

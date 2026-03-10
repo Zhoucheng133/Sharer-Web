@@ -14,11 +14,11 @@
       </div>
       <div class="tools">
         <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
-        <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader)" :popup="true" />
+        <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader, t)" :popup="true" />
 
-        <Button label="下载" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-        <Button label="删除" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast)"/>
-        <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast)" />
+        <Button :label="t('download')" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
+        <Button :label="t('delete')" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
+        <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" />
         <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" />
       </div>
       <div class="header">
@@ -26,8 +26,8 @@
           <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" />
         </div>
         <div></div>
-        <div class="header_label">名称</div>
-        <div class="header_label">大小</div>
+        <div class="header_label">{{ t('name') }}</div>
+        <div class="header_label">{{ t('size') }}</div>
         <div></div>
       </div>
     </div>
@@ -66,6 +66,9 @@ import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
 import Item from '../components/Item.vue';
 import Drag from '../components/Drag.vue';
+import { useI18n } from 'vue-i18n';
+
+const { t } = useI18n();
 
 const selectMenu=ref<FileItem>({
   name: '',
@@ -76,26 +79,26 @@ const selectMenu=ref<FileItem>({
 
 const bodyMenuItems=ref([
   {
-    label: "刷新",
+    label: t('refresh'),
     icon: 'pi pi-refresh',
-    command: ()=>refresh(toast)
+    command: ()=>refresh(toast, t)
   },
   {
-    label: "新建文件夹",
+    label: t('createFolder'),
     icon: "pi pi-folder-plus",
     command: ()=>{
       mkdirHandler()
     }
   },
   {
-    label: "上传文件",
+    label: t('uploadFile'),
     icon: 'pi pi-file-arrow-up',
     command: ()=>{
       fileUploader.value.click();
     }
   },
   {
-    label: "上传文件夹",
+    label: t('uploadFolder'),
     icon: 'pi pi-upload',
     command: ()=>{
       dirUploader.value.click();
@@ -105,22 +108,22 @@ const bodyMenuItems=ref([
 
 const menuItems=ref([
   {
-    label: '打开', 
+    label: t('open'), 
     icon: selectMenu.value.isDir ? 'pi pi-folder-open' : 'pi pi-file',
     command: ()=>clickHanlder(selectMenu.value)
   },
   {
-    label: '重命名',
+    label: t('rename'),
     icon: 'pi pi-pen-to-square',
     command: ()=>renameHandler(selectMenu.value)
   },
   {
-    label: '下载',
+    label: t('download'),
     icon: 'pi pi-download',
     command: ()=>downloadHandler(selectMenu.value)
   },
   {
-    label: '删除',
+    label: t('delete'),
     icon: 'pi pi-trash',
     command: ()=>delHandler(selectMenu.value)
   },
@@ -156,7 +159,7 @@ onMounted(async ()=>{
     fileUploader.value.addEventListener('change', (event: any) => {
       const target = event.currentTarget as HTMLInputElement;
       if (target.files && target.files.length > 0) {
-        uploadFiles(target.files, toast, target);
+        uploadFiles(target.files, toast, t,  target);
       }
     });
   }
@@ -164,7 +167,7 @@ onMounted(async ()=>{
     dirUploader.value.addEventListener('change', (event: any)=>{
       const target = event.currentTarget as HTMLInputElement; 
       if(target.files && target.files.length>0){
-        uploadFolder(target.files, toast, target);
+        uploadFolder(target.files, toast, t, target);
       }
       
     })
@@ -236,15 +239,15 @@ const onDrop = async (e: DragEvent) => {
     if (fileResults.length > 0) {
       const fileDT = new DataTransfer();
       fileResults.forEach((file) => fileDT.items.add(file));
-      uploadFiles(fileDT.files, toast, null, false);
+      uploadFiles(fileDT.files, toast, t, null, false);
     }
 
     if (folderResults.length > 0) {
       const folderDT = new DataTransfer();
       allFilesFromFolders.forEach((file) => folderDT.items.add(file));
-      uploadFolder(folderDT.files, toast, null, false);
+      uploadFolder(folderDT.files, toast, t, null, false);
     }
-    toast.add({ severity: 'success', summary: '上传成功', detail: '已上传所有文件 (目录)', life: 2000 });
+    toast.add({ severity: 'success', summary: t('uploadSuccess'), detail: t('uploadDone'), life: 2000 });
   }
 };
 

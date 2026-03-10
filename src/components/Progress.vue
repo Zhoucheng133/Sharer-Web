@@ -1,7 +1,7 @@
 <template>
   <div class="progress_panel" :style="{height: progress().panelHeight+'px'}">
     <div class="progress_titlebar" @click="progress().togglePanel()">
-      <div>上传列表</div>
+      <div>{{ t('uploadList') }}</div>
       <i class="pi pi-arrow-circle-up progress_titleicon" v-if="progress().panelHeight==50"></i>
       <i class="pi pi-arrow-circle-down progress_titleicon" v-else></i>
     </div>
@@ -27,4 +27,6 @@
 import "../styles/progress.css";
 import progress from "../hooks/progress";
 import { calSize } from "../hooks/static";
+import { useI18n } from 'vue-i18n';
+const { t } = useI18n();
 </script>
