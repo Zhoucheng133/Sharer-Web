@@ -1,7 +1,6 @@
 import axios from "axios";
 import hostname from "./hostname";
 import { useRouter } from "vue-router";
-import CryptoJS from "crypto-js";
 import store from "./store";
 
 interface LoginResponse{
@@ -48,32 +47,26 @@ export async function checkAuth(home: boolean): Promise<boolean>{
 
 async function tokenLogin(token: string): Promise<LoginResponse>{
   try {
-    const {data: response} = await axios.get(`${hostname}/api/login`, {
+    const {data: response} = await axios.get(`${hostname}/api/token`, {
       headers: {
         token: token
       }
     });
-    return {
-      ...response,
-      msg: token,
-    };
+    return response;
   } catch (error: any) {
     return error.response.data;
   }
 }
 
 export async function loginHandler(username: string, password: string): Promise<LoginResponse>{
-  const hash = CryptoJS.SHA256(username+password).toString();
   try {
-    const {data: response} = await axios.get(`${hostname}/api/login`, {
-      headers: {
-        token: hash
-      }
+    const {data: response} = await axios.post(`${hostname}/api/login`, {
+      username: username,
+      password: password
     });
-    return {
-      ...response,
-      msg: hash,
-    };
+    console.log(response);
+    
+    return response;
   } catch (error: any) {
     return error.response.data;
   }
