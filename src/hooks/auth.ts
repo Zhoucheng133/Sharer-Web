@@ -1,6 +1,5 @@
 import axios from "axios";
 import hostname from "./hostname";
-import { useRouter } from "vue-router";
 import store from "./store";
 
 interface LoginResponse{
@@ -8,39 +7,25 @@ interface LoginResponse{
   msg: string,
 }
 
-export async function checkAuth(home: boolean): Promise<boolean>{
+export async function checkAuth(): Promise<boolean>{
   
   const token=localStorage.getItem("token");
   if(token!=null && token.length!=0){
     store().token=token;
   }
 
-  const router=useRouter();
   const {data: auth}=await axios.get(`${hostname}/api/auth`);
 
   if(!auth.useAuth){
-    if(!home){
-      router.replace("/");
-    } 
     return true;
   }
 
   if(store().token.length==0){
-    if(home){
-      router.replace("/login");
-    }
     return false;
   }
 
   if((await tokenLogin(store().token)).ok){
-    if(!home){
-      router.replace("/");
-    }
     return true;
-  }
-
-  if(home){
-    router.replace("/login");
   }
   return false;
 }

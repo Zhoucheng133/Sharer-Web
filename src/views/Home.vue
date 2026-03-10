@@ -48,7 +48,6 @@
 
 <script lang="ts" setup>
 import { onMounted, ref } from 'vue';
-import { checkAuth } from '../hooks/auth';
 import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
@@ -172,10 +171,7 @@ onMounted(async ()=>{
       
     })
   }
-  const isAuth=await checkAuth(true);
-  if(isAuth){
-    getList();
-  }
+  getList();
   window.addEventListener("dragenter", onDragEnter);
   window.addEventListener("dragover", onDragOver);
   window.addEventListener("dragleave", onDragLeave);

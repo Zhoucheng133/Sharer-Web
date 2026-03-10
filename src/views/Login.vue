@@ -12,7 +12,7 @@
 </template>
 
 <script lang="ts" setup>
-import { checkAuth, loginHandler } from '../hooks/auth';
+import { loginHandler } from '../hooks/auth';
 import { InputText, Password, Button } from 'primevue';
 import "../styles/login.css";
 import { onMounted, ref } from 'vue';
@@ -49,6 +49,4 @@ onMounted(()=>{
 
 let username=ref("");
 let password=ref("");
-
-checkAuth(false);
 </script>
