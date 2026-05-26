@@ -114,7 +114,7 @@ export function menuDelHandler(event: any, confirm: any, toast: any, t: any, ite
         selector().selectAll=false;
         selector().indeterminate=false;
         selector().selectedFile=[];
-        getList();
+        await getList();
       }else{
         toast.add({ severity: 'error', summary: t("deleteFail"), detail: response.msg, life: 2000 });
       }
@@ -126,7 +126,7 @@ function uploadHandler(fileUploader: any){
   fileUploader.click();
 }
 
-export function uploadFiles(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean=true ){
+export async function uploadFiles(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean=true ){
   const formData = new FormData();
   for (const file of files) {
     formData.append('files', file);
@@ -136,57 +136,56 @@ export function uploadFiles(files: FileList, toast: any, t: any, target: HTMLInp
     progress().togglePanel();
   }
   
-  axios.post(`${hostname}/api/upload`, formData, {
-    headers: {
-      'Content-Type': 'multipart/form-data',
-      token: store().token,
-    },
-    params: {
-      path: encodeURIComponent(store().pathResolve),
-    },
-    onUploadProgress: (progressEvent: any) => {
-      let index=progress().uploadList.findIndex((item)=>item.id==id);
-      const count=files.length;
-      if(index==-1){
-        let totalSize = 0;
-        for (const file of files) {
-            totalSize += file.size;
+  try {
+    await axios.post(`${hostname}/api/upload`, formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+        token: store().token,
+      },
+      params: {
+        path: encodeURIComponent(store().pathResolve),
+      },
+      onUploadProgress: (progressEvent: any) => {
+        let index=progress().uploadList.findIndex((item)=>item.id==id);
+        const count=files.length;
+        if(index==-1){
+          let totalSize = 0;
+          for (const file of files) {
+              totalSize += file.size;
+          }
+          progress().uploadList.push({
+            id: id,
+            name: count==1 ? files[0].name : `${files[0].name}${t("etc")}`,
+            progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
+            size: totalSize
+          })
+          if(target!=null){
+            target.value = '';
+          }
+        }else{
+          progress().uploadList[index]={
+            ...progress().uploadList[index],
+            progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
+          }
         }
-        progress().uploadList.push({
-          id: id,
-          name: count==1 ? files[0].name : `${files[0].name}${t("etc")}`,
-          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total),
-          size: totalSize
-        })
-        if(target!=null){
-          target.value = '';
-        }
-      }else{
-        progress().uploadList[index]={
-          ...progress().uploadList[index],
-          progress: Math.round((progressEvent.loaded * 100) / progressEvent.total)
-        }
-      }
-    },
-  })
-  .then(_ => {
+      },
+    })
     if(showToast){
       toast.add({ severity: 'success', summary: t("uploadSuccess"), detail: t("uploadDone"), life: 2000 });
     }
-    getList();
-  })
-  .catch(error => {
+    await getList();
+  } catch (error) {
     if(showToast){
       toast.add({ severity: 'error', summary: t("uploadFail"), detail: error, life: 2000 });
     }
-  });
+  }
 }
 
 function uploadFolderHandler(dirUploader: any){
   dirUploader.click();
 }
 
-export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean = true) {
+export async function uploadFolder(files: FileList, toast: any, t: any, target: HTMLInputElement | null, showToast: boolean = true) {
   if (files.length === 0) return;
 
   if (progress().panelHeight == 50) {
@@ -211,44 +210,42 @@ export function uploadFolder(files: FileList, toast: any, t: any, target: HTMLIn
   }
 
   const id = nanoid();
-  
-  axios.post(`${hostname}/api/uploadFolder`, formData, {
-    headers: {
-      token: store().token
-    },
-    params: {
-      path: encodeURIComponent(store().pathResolve),
-    },
-    onUploadProgress: (progressEvent: any) => {
-      let index = progress().uploadList.findIndex((item) => item.id == id);
-      const currentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
+  try {
+    await axios.post(`${hostname}/api/uploadFolder`, formData, {
+      headers: {
+        token: store().token
+      },
+      params: {
+        path: encodeURIComponent(store().pathResolve),
+      },
+      onUploadProgress: (progressEvent: any) => {
+        let index = progress().uploadList.findIndex((item) => item.id == id);
+        const currentProgress = Math.round((progressEvent.loaded * 100) / progressEvent.total);
 
-      if (index == -1) {
-        progress().uploadList.push({
-          id: id,
-          name: basePath,
-          progress: currentProgress,
-          size: totalSize
-        });
-      } else {
-        progress().uploadList[index] = {
-          ...progress().uploadList[index],
-          progress: currentProgress
-        };
-      }
-    },
-  })
-  .then(_ => {
+        if (index == -1) {
+          progress().uploadList.push({
+            id: id,
+            name: basePath,
+            progress: currentProgress,
+            size: totalSize
+          });
+        } else {
+          progress().uploadList[index] = {
+            ...progress().uploadList[index],
+            progress: currentProgress
+          };
+        }
+      },
+    })
     if (showToast) {
       toast.add({ severity: 'success', summary: t("uploadSuccess"), detail: t("uploadDone"), life: 2000 });
     }
-    getList();
-  })
-  .catch(error => {
+    await getList();
+  } catch (error) {
     if (showToast) {
-      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error.message || error, life: 2000 });
+      toast.add({ severity: 'error', summary: t("uploadFail"), detail: error || error, life: 2000 });
     }
-  });
+  }
 }
 
 export function renameHandler(file: FileItem){

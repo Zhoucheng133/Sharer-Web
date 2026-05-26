@@ -235,13 +235,13 @@ const onDrop = async (e: DragEvent) => {
     if (fileResults.length > 0) {
       const fileDT = new DataTransfer();
       fileResults.forEach((file) => fileDT.items.add(file));
-      uploadFiles(fileDT.files, toast, t, null, false);
+      await uploadFiles(fileDT.files, toast, t, null, false);
     }
 
     if (folderResults.length > 0) {
       const folderDT = new DataTransfer();
       allFilesFromFolders.forEach((file) => folderDT.items.add(file));
-      uploadFolder(folderDT.files, toast, t, null, false);
+      await uploadFolder(folderDT.files, toast, t, null, false);
     }
     toast.add({ severity: 'success', summary: t('uploadSuccess'), detail: t('uploadDone'), life: 2000 });
   }
