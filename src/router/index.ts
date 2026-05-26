@@ -1,8 +1,9 @@
 import {createRouter, createWebHistory} from "vue-router";
 import Home from "../views/Home.vue";
 import Login from "../views/Login.vue";
+import { checkAuth } from "../hooks/auth.ts";
 
-export default createRouter({
+const router=createRouter({
   history: createWebHistory(),
   routes: [
     {
@@ -18,3 +19,18 @@ export default createRouter({
   ]
 })
 
+router.beforeEach(async (to) => {
+  const ok=await checkAuth();
+  if (!ok) {
+    if (to.path !== "/login") {
+      return "/login";
+    }
+    return true;
+  }
+  if (ok && to.path === "/login") {
+    return "/";
+  }
+  return true;
+})
+
+export default router;
