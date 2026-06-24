@@ -8,23 +8,22 @@ import dialogs from "./dialogs";
 import { nanoid } from "nanoid";
 import progress from "./progress";
 
-export async function getList(){
-  const {data: response}=await axios.post(`${hostname}/api/list`, {
-    "path": store().pathResolve
-  }, {
-    headers: {
-      token: store().token
-    }
-  });
-  const list=response.ok ? (response.items ==null ? []: response.items) : [];
-  
-  store().fileList=list.map((item: any)=>{
-    return {
-      ...item,
-      selected: false,
-    }
-  })
-  
+export async function getList() {
+  const { data: response } = await axios.post(
+    `${hostname}/api/list`,
+    { path: store().pathResolve },
+    { headers: { token: store().token } }
+  );
+
+  const items: { name: string; size: number; isDir: boolean }[] =
+    response.ok && response.items != null ? response.items : [];
+
+  store().fileList = items
+    .sort((a, b) => {
+      if (a.isDir !== b.isDir) return a.isDir ? -1 : 1;
+      return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
+    })
+    .map((item) => ({ ...item, selected: false }));
 }
 
 export async function clickHanlder(item: FileItem){
