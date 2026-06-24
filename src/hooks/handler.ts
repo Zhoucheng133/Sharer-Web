@@ -24,6 +24,7 @@ export async function getList() {
       return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
     })
     .map((item) => ({ ...item, selected: false }));
+  selector().selection=[];
 }
 
 export async function clickHanlder(item: FileItem){
