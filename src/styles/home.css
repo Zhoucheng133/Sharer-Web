@@ -1,6 +1,4 @@
 body{
-  display: flex;
-  justify-content: center;
   height: 100vh;
   overflow-y: auto;
   user-select: none;
@@ -8,6 +6,15 @@ body{
 .page{
   width: 1000px;
   min-height: 100vh;
+  margin: 0 auto;
+}
+.drag-select__wrapper{
+  display: block;
+  width: 100%;
+  min-height: 100vh;
+}
+.drag-select__area{
+  z-index: 1000;
 }
 @media screen and (max-width: 1040px) {
   .page {
