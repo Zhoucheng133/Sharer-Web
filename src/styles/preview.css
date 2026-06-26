@@ -16,9 +16,15 @@
   }
 }
 .preview_bg, .preview_bg_hide{
-  background-color: rgba(255, 255, 255, 0.9);
+  background-color: rgba(255, 255, 255, 0.4);
   display: grid;
   grid-template-rows: 50px auto 50px;
+  backdrop-filter: blur(15px);
+}
+@media (prefers-color-scheme: dark) {
+  .preview_bg, .preview_bg_hide{
+    background-color: rgba(0, 0, 0, 0.4);
+  }
 }
 .preview_bg{
   animation: opacityShow .2s linear forwards;
@@ -56,9 +62,6 @@
   height: 100%;
   width: 100%;
   object-fit: contain;
-}
-.preview_title_bar{
-  background-color: white;
 }
 .preview_title_bar{
   display: flex;

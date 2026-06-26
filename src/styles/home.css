@@ -34,7 +34,8 @@ body{
 .fixed{
   position: sticky;
   top: 0;
-  background-color: white;
+  /* background-color: white; */
+  background-color: var(--p-content-background);
   z-index: 10;
 }
 .header{
@@ -81,6 +82,14 @@ body{
   .file_item:hover {
     grid-template-columns: 45px 45px auto 0px 100px 45px;
     background-color: rgb(245, 245, 245);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  .header{
+    background-color: rgb(30, 30, 30);
+  }
+  .file_item:hover {
+    background-color: rgb(50, 50, 50);
   }
 }
 .path_item{

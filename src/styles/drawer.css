@@ -4,5 +4,5 @@
   height: 50px;
   align-items: center;
   font-weight: bold;
-  background-color: white;
+  background-color: var(--p-drawer-background);
 }
