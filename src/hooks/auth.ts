@@ -53,6 +53,8 @@ export async function loginHandler(username: string, password: string): Promise<
       username: username,
       password: password
     });
+    console.log(response);
+    
     return response;
   } catch (error: any) {
     return error.response.data;

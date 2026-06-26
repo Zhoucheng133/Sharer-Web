@@ -8,8 +8,6 @@ export default defineStore("selector", ()=>{
   let selectAll=ref<boolean>(false);
   let indeterminate=ref<boolean>(false);
 
-  let selection=ref<FileItem[]>([]);
-
   function selectAllChange(e: any){
     if(e.target.checked){
       store().fileList=store().fileList.map((item: FileItem)=>{
@@ -51,26 +49,5 @@ export default defineStore("selector", ()=>{
     }
   }
 
-  function dragSelectHandler(files: FileItem[]) {
-    if (files.length === 0) {
-      store().fileList.forEach(item => item.selected = false);
-      selectedFile.value = [];
-    } else {
-      store().fileList.forEach(item => {
-        item.selected = files.some(f => f.name === item.name);
-      });
-      selectedFile.value = files;
-    }
-
-    if (store().fileList.every(item => item.selected === false)) {
-      selectAll.value = false;
-      indeterminate.value = false;
-    } else if (store().fileList.every(item => item.selected === true)) {
-      selectAll.value = true;
-      indeterminate.value = false;
-    } else {
-      indeterminate.value = true;
-    }
-  }
-  return {selectAll, selectedFile, selectAllChange, selectChange, indeterminate, dragSelectHandler, selection}
+  return {selectAll, selectedFile, selectAllChange, selectChange, indeterminate}
 })

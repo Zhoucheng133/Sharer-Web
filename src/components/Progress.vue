@@ -1,6 +1,6 @@
 <template>
   <div class="progress_panel" :style="{height: progress().panelHeight+'px'}">
-    <div class="progress_titlebar" @click="progress().togglePanel()" @mousedown.stop @click.stop>
+    <div class="progress_titlebar" @click="progress().togglePanel()">
       <div>{{ t('uploadList') }}</div>
       <i class="pi pi-arrow-circle-up progress_titleicon" v-if="progress().panelHeight==50"></i>
       <i class="pi pi-arrow-circle-down progress_titleicon" v-else></i>

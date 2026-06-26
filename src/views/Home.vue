@@ -27,7 +27,7 @@
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">
-          <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" @mousedown.stop @click.stop />
+          <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" />
         </div>
         <div></div>
         <div class="header_label">{{ t('name') }}</div>
@@ -35,9 +35,7 @@
         <div></div>
       </div>
     </div>
-    <drag-select-option v-for="(item, _) in store().list" :value="item" :key="item.name">
-      <Item :item="item" @contextmenu="showMenu($event, item)" />
-    </drag-select-option>
+    <Item v-for="(item, index) in store().list" :key="index" :item="item" @contextmenu="showMenu($event, item)" />
     <ContextMenu ref="menu" :model="menuItems" />
     <div style="height: 50px;"></div>
   </div>

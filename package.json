@@ -9,7 +9,6 @@
     "preview": "vite preview"
   },
   "dependencies": {
-    "@coleqiu/vue-drag-select": "^2.0.6-beta.1",
     "@primevue/themes": "^4.2.5",
     "@tailwindcss/vite": "^4.1.13",
     "@types/crypto-js": "^4.2.2",

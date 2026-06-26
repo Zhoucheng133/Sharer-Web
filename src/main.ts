@@ -13,7 +13,6 @@ import { createI18n } from 'vue-i18n';
 import zhCN from './i18n/zh_cn.ts';
 import enUS from './i18n/en_us.ts';
 import zhTW from './i18n/zh_tw.ts';
-import VueDragSelect from "@coleqiu/vue-drag-select";
 
 const app = createApp(App);
 const pinia = createPinia()
@@ -36,8 +35,7 @@ app.use(ToastService);
 app.use(ConfirmationService);
 app.use(router);
 app.use(pinia);
-app.use(i18n);
-app.use(VueDragSelect);
+app.use(i18n)
 
 const primaryColor="cyan";
 
