@@ -1,61 +1,59 @@
 <template>
-  <drag-select v-model="selection" :key="store().path">
-    <Drag class="drag_view" v-if="isDragging" />
-    <Toast />
-    <ConfirmPopup />
-    <div class="page">
-      <div class="fixed">
-        <div class="title_bar"></div>
-        <div class="path">
-          <div :class="store().path.length==0 ? 'path_label_end' : 'path_label'" @click="pathHandler()">Root</div>
-          <div class="path_item" v-for="(item, index) in store().path" :key="index">
-            <i class="pi pi-arrow-right" style="margin-left: 5px; margin-right: 5px; font-size: 12px; display: flex; align-items: center;"></i>
-            <div :class="index==store().path.length-1 ? 'path_label_end' : 'path_label'" @click="pathHandler(index)">{{ item }}</div>
-          </div>
-        </div>
-        <div class="tools">
-          <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
-          <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader, t)" :popup="true" />
-
-          <Button :label="t('download')" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-          <Button :label="t('delete')" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
-          <Button :label="t('copy')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'copy')"></Button>
-          <Button :label="t('move')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'move')"></Button>
-          <Button :label="t('copyHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='copy'" ></Button>
-          <Button :label="t('moveHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='move'"></Button>
-          <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" class="refresh_button" />
-          <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" />
-        </div>
-        <div class="header">
-          <div class="header_label" style="display: flex; justify-content: center;">
-            <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" @mousedown.stop @click.stop />
-          </div>
-          <div></div>
-          <div class="header_label">{{ t('name') }}</div>
-          <div class="header_label">{{ t('size') }}</div>
-          <div></div>
+  <Drag class="drag_view" v-if="isDragging" />
+  <Toast />
+  <ConfirmPopup />
+  <div class="page">
+    <div class="fixed">
+      <div class="title_bar"></div>
+      <div class="path">
+        <div :class="store().path.length==0 ? 'path_label_end' : 'path_label'" @click="pathHandler()">Root</div>
+        <div class="path_item" v-for="(item, index) in store().path" :key="index">
+          <i class="pi pi-arrow-right" style="margin-left: 5px; margin-right: 5px; font-size: 12px; display: flex; align-items: center;"></i>
+          <div :class="index==store().path.length-1 ? 'path_label_end' : 'path_label'" @click="pathHandler(index)">{{ item }}</div>
         </div>
       </div>
-      <drag-select-option v-for="(item, _) in store().list" :value="item" :key="item.name">
-        <Item :item="item" @contextmenu="showMenu($event, item)" />
-      </drag-select-option>
-      <ContextMenu ref="menu" :model="menuItems" />
-      <div style="height: 50px;"></div>
+      <div class="tools">
+        <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
+        <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader, t)" :popup="true" />
+
+        <Button :label="t('download')" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
+        <Button :label="t('delete')" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
+        <Button :label="t('copy')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'copy')"></Button>
+        <Button :label="t('move')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'move')"></Button>
+        <Button :label="t('copyHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='copy'" ></Button>
+        <Button :label="t('moveHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='move'"></Button>
+        <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" class="refresh_button" />
+        <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" />
+      </div>
+      <div class="header">
+        <div class="header_label" style="display: flex; justify-content: center;">
+          <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" @mousedown.stop @click.stop />
+        </div>
+        <div></div>
+        <div class="header_label">{{ t('name') }}</div>
+        <div class="header_label">{{ t('size') }}</div>
+        <div></div>
+      </div>
     </div>
-    <Preview class="preview" v-if="preview().previewFile.length!=0"/>
-    <Mkdir />
-    <Rename />
-    <Delete />
-    <Drawer :visiable="drawer().showDrawer" />
-    <Progress class="progress_component" />
-    <input type="file" multiple style="display: none;" ref="fileUploader">
-    <input type="file" multiple webkitdirectory directory style="display: none;" ref="dirUploader">
-    <ContextMenu ref="pageMenu" :model="bodyMenuItems" />
-  </drag-select>
+    <drag-select-option v-for="(item, _) in store().list" :value="item" :key="item.name">
+      <Item :item="item" @contextmenu="showMenu($event, item)" />
+    </drag-select-option>
+    <ContextMenu ref="menu" :model="menuItems" />
+    <div style="height: 50px;"></div>
+  </div>
+  <Preview class="preview" v-if="preview().previewFile.length!=0"/>
+  <Mkdir />
+  <Rename />
+  <Delete />
+  <Drawer :visiable="drawer().showDrawer" />
+  <Progress class="progress_component" />
+  <input type="file" multiple style="display: none;" ref="fileUploader">
+  <input type="file" multiple webkitdirectory directory style="display: none;" ref="dirUploader">
+  <ContextMenu ref="pageMenu" :model="bodyMenuItems" />
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref, watch } from 'vue';
+import { onMounted, ref } from 'vue';
 import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
@@ -75,17 +73,10 @@ import Item from '../components/Item.vue';
 import Drag from '../components/Drag.vue';
 import copymove from '../hooks/copymove.ts';
 import { useI18n } from 'vue-i18n';
-import { storeToRefs } from 'pinia';
 
 const { t } = useI18n();
 
 const copyMove=copymove();
-
-const selection=storeToRefs(selector()).selection
-
-watch(selection, ()=>{
-  selector().dragSelectHandler(selection.value);
-})
 
 
 const selectMenu=ref<FileItem>({
