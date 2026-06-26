@@ -19,7 +19,11 @@
 
           <Button :label="t('download')" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
           <Button :label="t('delete')" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
-          <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" />
+          <Button :label="t('copy')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'copy')"></Button>
+          <Button :label="t('move')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'move')"></Button>
+          <Button :label="t('copyHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='copy'" ></Button>
+          <Button :label="t('moveHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='move'"></Button>
+          <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" class="refresh_button" />
           <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" />
         </div>
         <div class="header">
@@ -69,10 +73,13 @@ import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
 import Item from '../components/Item.vue';
 import Drag from '../components/Drag.vue';
+import copymove from '../hooks/copymove.ts';
 import { useI18n } from 'vue-i18n';
 import { storeToRefs } from 'pinia';
 
 const { t } = useI18n();
+
+const copyMove=copymove();
 
 const selection=storeToRefs(selector()).selection
 

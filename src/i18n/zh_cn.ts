@@ -45,5 +45,9 @@ export default {
 
   'fileOptions': '文件操作',
 
-  'uploadList': '上传列表'
+  'uploadList': '上传列表',
+  'move': '移动',
+  'copy': '复制',
+  'moveHere': '移动到这里',
+  'copyHere': '复制到这里',
 };

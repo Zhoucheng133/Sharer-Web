@@ -45,5 +45,9 @@ export default {
 
   'fileOptions': 'File Operations',
 
-  'uploadList': 'Upload List'
+  'uploadList': 'Upload List',
+  'move': 'Move',
+  'copy': 'Copy',
+  'moveHere': 'Move Here',
+  'copyHere': 'Copy Here',
 };

@@ -20,6 +20,9 @@ body{
   .page {
     width: calc(100vw - 40px);
   }
+  .refresh_button{
+    display: none !important;
+  }
 }
 .title_bar{
   height: 50px;
