@@ -22,8 +22,9 @@
         <Button :label="t('move')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'move')"></Button>
         <Button :label="t('copyHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='copy'" @click="copyMoveHandler(toast, t, 'copy')"></Button>
         <Button :label="t('moveHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='move'" @click="copyMoveHandler(toast, t, 'move')"></Button>
+        <Button :label="t('cancel')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles!=null" @click="copyMove.clearCopyMove()"></Button>
         <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" class="refresh_button" />
-        <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" />
+        <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" v-if="copyMove.copyMoveFiles==null" />
       </div>
       <div class="header">
         <div class="header_label" style="display: flex; justify-content: center;">

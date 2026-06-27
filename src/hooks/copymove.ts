@@ -20,8 +20,13 @@ export default defineStore("copyMove", ()=>{
     };
   }
 
+  function clearCopyMove() {
+    copyMoveFiles.value = null;
+  }
+
   return {
     copyMoveFiles,
-    copyMoveSelector
+    copyMoveSelector,
+    clearCopyMove
   };
 });
