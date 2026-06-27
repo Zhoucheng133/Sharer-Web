@@ -52,7 +52,7 @@
 </template>
 
 <script lang="ts" setup>
-import { onMounted, ref } from 'vue';
+import { computed, onMounted, ref } from 'vue';
 import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
@@ -85,34 +85,55 @@ const selectMenu=ref<FileItem>({
   selected: false
 });
 
-const bodyMenuItems=ref([
-  {
-    label: t('refresh'),
-    icon: 'pi pi-refresh',
-    command: ()=>refresh(toast, t)
-  },
-  {
-    label: t('createFolder'),
-    icon: "pi pi-folder-plus",
-    command: ()=>{
-      mkdirHandler()
+const bodyMenuItems=computed(()=>{
+  const items: any[] = [
+    {
+      label: t('refresh'),
+      icon: 'pi pi-refresh',
+      command: ()=>refresh(toast, t)
+    },
+    {
+      label: t('createFolder'),
+      icon: "pi pi-folder-plus",
+      command: ()=>{
+        mkdirHandler()
+      }
+    },
+    {
+      label: t('uploadFile'),
+      icon: 'pi pi-file-arrow-up',
+      command: ()=>{
+        fileUploader.value.click();
+      }
+    },
+    {
+      label: t('uploadFolder'),
+      icon: 'pi pi-upload',
+      command: ()=>{
+        dirUploader.value.click();
+      }
     }
-  },
-  {
-    label: t('uploadFile'),
-    icon: 'pi pi-file-arrow-up',
-    command: ()=>{
-      fileUploader.value.click();
-    }
-  },
-  {
-    label: t('uploadFolder'),
-    icon: 'pi pi-upload',
-    command: ()=>{
-      dirUploader.value.click();
+  ]
+
+  if(copyMove.copyMoveFiles){
+    items.push({ separator: true })
+    if(copyMove.copyMoveFiles.type=='copy'){
+      items.push({
+        label: t('copyHere'),
+        icon: 'pi pi-copy',
+        command: ()=>copyMoveHandler(toast, t, 'copy')
+      })
+    }else{
+      items.push({
+        label: t('moveHere'),
+        icon: 'pi pi-folder',
+        command: ()=>copyMoveHandler(toast, t, 'move')
+      })
     }
   }
-])
+
+  return items
+})
 
 const menuItems=ref([
   {
@@ -129,6 +150,22 @@ const menuItems=ref([
     label: t('download'),
     icon: 'pi pi-download',
     command: ()=>downloadHandler(selectMenu.value)
+  },
+  {
+    label: t('copy'),
+    icon: 'pi pi-copy',
+    command: ()=>{
+      selector().selectedFile=[selectMenu.value];
+      copyMove.copyMoveSelector(selector().selectedFile, 'copy');
+    }
+  },
+  {
+    label: t('move'),
+    icon: 'pi pi-folder',
+    command: ()=>{
+      selector().selectedFile=[selectMenu.value];
+      copyMove.copyMoveSelector(selector().selectedFile, 'move');
+    }
   },
   {
     label: t('delete'),
