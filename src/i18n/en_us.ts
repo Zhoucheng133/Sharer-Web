@@ -50,4 +50,8 @@ export default {
   'copy': 'Copy',
   'moveHere': 'Move Here',
   'copyHere': 'Copy Here',
+  'copyOk': 'Files/Folders Copied',
+  'moveOk': 'Files/Folders Moved',
+  'copyFail': 'Copy Failed',
+  'moveFail': 'Move Failed',
 };

@@ -5,6 +5,7 @@ import selector from "./selector";
 import hostname from "./hostname";
 import axios from "axios";
 import dialogs from "./dialogs";
+import copymove from "./copymove";
 import { nanoid } from "nanoid";
 import progress from "./progress";
 
@@ -254,6 +255,31 @@ export function renameHandler(file: FileItem){
 
 export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
+}
+
+export async function copyMoveHandler(toast: any, t: any, type: 'copy' | 'move') {
+  const cm = copymove();
+  if (!cm.copyMoveFiles) return;
+
+  const endpoint = type === 'copy' ? '/api/copy' : '/api/move';
+  const { data: response } = await axios.post(`${hostname}${endpoint}`, {
+    from: cm.copyMoveFiles.path,
+    to: store().pathResolve,
+    files: cm.copyMoveFiles.files,
+  }, {
+    headers: { token: store().token }
+  });
+
+  if (response.ok) {
+    const key = type === 'copy' ? 'copyOk' : 'moveOk';
+    toast.add({ severity: 'success', summary: t('opOk'), detail: t(key), life: 2000 });
+    cm.copyMoveFiles = null;
+    selector().selectedFile = [];
+    await getList();
+  } else {
+    const key = type === 'copy' ? 'copyFail' : 'moveFail';
+    toast.add({ severity: 'error', summary: t(key), detail: response.msg, life: 2000 });
+  }
 }
 
 export const addItems=(fileUploader: any, dirUploader: any, t: any)=>{

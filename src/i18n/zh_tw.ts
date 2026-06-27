@@ -50,4 +50,8 @@ export default {
   'copy': '複製',
   'moveHere': '移動至此處',
   'copyHere': '複製至此處',
+  'copyOk': '已複製檔案(夾)',
+  'moveOk': '已移動檔案(夾)',
+  'copyFail': '複製失敗',
+  'moveFail': '移動失敗',
 };
