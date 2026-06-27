@@ -54,4 +54,6 @@ export default {
   'moveOk': 'Files/Folders Moved',
   'copyFail': 'Copy Failed',
   'moveFail': 'Move Failed',
+  'copySamePath': 'Target is the same as current location',
+  'moveSamePath': 'Target is the same as current location',
 };

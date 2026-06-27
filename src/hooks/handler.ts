@@ -261,6 +261,12 @@ export async function copyMoveHandler(toast: any, t: any, type: 'copy' | 'move')
   const cm = copymove();
   if (!cm.copyMoveFiles) return;
 
+  if (cm.copyMoveFiles.path === store().pathResolve) {
+    const key = type === 'copy' ? 'copySamePath' : 'moveSamePath';
+    toast.add({ severity: 'warn', summary: t(key), life: 3000 });
+    return;
+  }
+
   const endpoint = type === 'copy' ? '/api/copy' : '/api/move';
   const { data: response } = await axios.post(`${hostname}${endpoint}`, {
     from: cm.copyMoveFiles.path,

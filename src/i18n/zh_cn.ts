@@ -54,4 +54,6 @@ export default {
   'moveOk': '已移动文件(夹)',
   'copyFail': '复制失败',
   'moveFail': '移动失败',
+  'copySamePath': '目标位置与当前位置相同',
+  'moveSamePath': '目标位置与当前位置相同',
 };
