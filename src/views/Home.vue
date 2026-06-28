@@ -116,15 +116,15 @@ const bodyMenuItems=computed(()=>{
   ]
 
   if(copyMove.copyMoveFiles){
-    items.push({ separator: true })
+    items.unshift({ separator: true })
     if(copyMove.copyMoveFiles.type=='copy'){
-      items.push({
+      items.unshift({
         label: t('copyHere'),
         icon: 'pi pi-copy',
         command: ()=>copyMoveHandler(toast, t, 'copy')
       })
     }else{
-      items.push({
+      items.unshift({
         label: t('moveHere'),
         icon: 'pi pi-folder',
         command: ()=>copyMoveHandler(toast, t, 'move')
