@@ -8,11 +8,14 @@ export interface FileItem{
   selected: boolean,
 }
 
+export type ViewMode = 'list' | 'grid';
+
 export default defineStore("store", ()=>{
   let fileList=ref<FileItem[]>([]);
   let token=ref<string>("");
   let path=ref<string[]>([]);
   let showHide=ref<boolean>(true);
+  let viewMode=ref<ViewMode>(localStorage.getItem("viewMode")==='grid' ? 'grid' : 'list');
 
   const pathResolve=computed(()=>{
     let val="/";
@@ -33,6 +36,7 @@ export default defineStore("store", ()=>{
     path,
     pathResolve,
     showHide,
+    viewMode,
     list
   };
 })

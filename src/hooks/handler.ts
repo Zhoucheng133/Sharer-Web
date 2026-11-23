@@ -332,6 +332,11 @@ export function toggleHide(){
   localStorage.setItem("showHide", store().showHide ? "true" : "false");
 }
 
+export function toggleViewMode(){
+  store().viewMode=store().viewMode === 'grid' ? 'list' : 'grid';
+  localStorage.setItem("viewMode", store().viewMode);
+}
+
 export function readAllFilesFromDirectory(entry: any): Promise<File[]> {
   return new Promise((resolve, reject) => {
     const reader = entry.createReader();

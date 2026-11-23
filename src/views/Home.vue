@@ -27,8 +27,12 @@
         <Button :label="t('cancel')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles!=null" @click="copyMove.clearCopyMove()"></Button>
         <Button icon="pi pi-refresh" variant="text" size="small" style="margin-left: 5px;" @click="refresh(toast, t)" class="refresh_button" />
         <Button :icon="store().showHide ? 'pi pi-eye' : 'pi pi-eye-slash'" variant="text" size="small" style="margin-left: 5px;" @click="toggleHide" v-if="copyMove.copyMoveFiles==null" />
+        <Button :icon="store().viewMode === 'grid' ? 'pi pi-list' : 'pi pi-th-large'"
+                :title="store().viewMode === 'grid' ? t('listView') : t('gridView')"
+                :aria-label="store().viewMode === 'grid' ? t('listView') : t('gridView')"
+                variant="text" size="small" style="margin-left: 5px;" @click="toggleViewMode" />
       </div>
-      <div class="header">
+      <div class="header" v-if="store().viewMode === 'list'">
         <div class="header_label" style="display: flex; justify-content: center;">
           <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" />
         </div>
@@ -37,8 +41,17 @@
         <div class="header_label">{{ t('size') }}</div>
         <div></div>
       </div>
+      <div class="grid_header" v-else>
+        <Checkbox v-model="selector().selectAll" binary size="small" @change="selector().selectAllChange" :indeterminate="selector().indeterminate" />
+        <span class="header_label">{{ t('selectAll') }}</span>
+      </div>
     </div>
-    <Item v-for="(item, index) in store().list" :key="index" :item="item" @contextmenu="showMenu($event, item)" />
+    <div class="file_grid" v-if="store().viewMode === 'grid'">
+      <GridItem v-for="item in store().list" :key="store().pathResolve + item.name" :item="item" @contextmenu="showMenu($event, item)" />
+    </div>
+    <template v-else>
+      <Item v-for="(item, index) in store().list" :key="index" :item="item" @contextmenu="showMenu($event, item)" />
+    </template>
     <ContextMenu ref="menu" :model="menuItems" />
     <div style="height: 50px;"></div>
   </div>
@@ -59,7 +72,7 @@ import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
 import selector from '../hooks/selector';
-import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, clickHanlder, delHandler, renameHandler, readAllFilesFromDirectory, readFile, mkdirHandler, copyMoveHandler } from '../hooks/handler';
+import { pathHandler, downloadHandler, getList, menuDelHandler, addItems, refresh, uploadFiles, uploadFolder, toggleHide, toggleViewMode, clickHanlder, delHandler, renameHandler, readAllFilesFromDirectory, readFile, mkdirHandler, copyMoveHandler } from '../hooks/handler';
 import Preview from '../components/Preview.vue';
 import preview from '../hooks/preview';
 import { useConfirm } from "primevue/useconfirm";
@@ -71,6 +84,7 @@ import Rename from '../components/dialogs/Rename.vue';
 import Delete from '../components/dialogs/Delete.vue';
 import Progress from '../components/Progress.vue';
 import Item from '../components/Item.vue';
+import GridItem from '../components/GridItem.vue';
 import Drag from '../components/Drag.vue';
 import copymove from '../hooks/copymove.ts';
 import { useI18n } from 'vue-i18n';
