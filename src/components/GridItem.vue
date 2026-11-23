@@ -94,7 +94,7 @@ const fallbackIcon = computed(() => getAsset(item.value) ?? '');
 const thumbUrl = computed(() => {
   if (!isImage.value) return '';
   const path = store().pathResolve + item.value.name;
-  return `${hostname}/api/raw?path=${encodeURIComponent(path)}&token=${store().token}`;
+  return `${hostname}/api/preview?path=${encodeURIComponent(path)}&token=${store().token}`;
 });
 
 // The observer only starts loading the full-size image when the tile is near the viewport.
