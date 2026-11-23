@@ -28,9 +28,9 @@
       </div>
 
       <div class="grid_actions" @click.stop>
-        <Button icon="pi pi-download" rounded severity="secondary" variant="outlined" size="small" @click="downloadHandler(item)" />
-        <Button icon="pi pi-pen-to-square" rounded severity="secondary" variant="outlined" size="small" @click="renameHandler(item)" />
-        <Button icon="pi pi-trash" rounded severity="danger" variant="outlined" size="small" @click="delHandler(item)" />
+        <Button icon="pi pi-ellipsis-h" rounded severity="secondary" size="small"
+                :aria-label="t('fileOptions')" :title="t('fileOptions')"
+                aria-haspopup="true" :aria-controls="actionMenuId" @click="toggleActionMenu" />
       </div>
     </div>
 
@@ -41,13 +41,15 @@
         <Button icon="pi pi-ellipsis-v" severity="secondary" variant="text" size="small" @click="drawer().toggleDrawer(item)" />
       </span>
     </div>
+
+    <Menu :id="actionMenuId" ref="actionMenu" :model="actionItems" :popup="true" appendTo="body" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue';
+import { computed, ref, useId } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { Button, Checkbox } from 'primevue';
+import { Button, Checkbox, Menu } from 'primevue';
 import type { FileItem } from '../hooks/store';
 import store from '../hooks/store';
 import hostname from '../hooks/hostname';
@@ -62,6 +64,31 @@ const props = defineProps<{ item: FileItem }>();
 const item = computed(() => props.item);
 const { t } = useI18n();
 
+const actionMenu = ref();
+const actionMenuId = `grid_action_menu_${useId()}`;
+const actionItems = computed(() => [
+  {
+    label: t('download'),
+    icon: 'pi pi-download',
+    command: () => downloadHandler(item.value)
+  },
+  {
+    label: t('rename'),
+    icon: 'pi pi-pen-to-square',
+    command: () => renameHandler(item.value)
+  },
+  {
+    label: t('delete'),
+    icon: 'pi pi-trash',
+    class: 'grid_action_delete',
+    command: () => delHandler(item.value)
+  }
+]);
+
+function toggleActionMenu(event: MouseEvent) {
+  actionMenu.value.toggle(event);
+}
+
 const isImage = computed(() => !item.value.isDir && getFileType(item.value.name) === Types.Image);
 const fallbackIcon = computed(() => getAsset(item.value) ?? '');
 const thumbUrl = computed(() => {
@@ -71,6 +98,6 @@ const thumbUrl = computed(() => {
 });
 
 // The observer only starts loading the full-size image when the tile is near the viewport.
-const { el, shouldLoad, loaded, failed } = useLazyImage(thumbUrl);
+const { shouldLoad, loaded, failed } = useLazyImage(thumbUrl);
 const { isDragging, isDropTarget, onDragStart, onDragEnd, onDragEnter, onDragOver, onDragLeave, onDrop } = useItemDrag(item);
 </script>

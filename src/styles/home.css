@@ -268,14 +268,26 @@ body{
 .file_grid .grid_item:hover .grid_actions{
   opacity: 1;
 }
-.grid_actions .p-button,
-.grid_more .p-button{
+.file_grid .grid_actions .p-button,
+.file_grid .grid_more .p-button{
+  flex: 0 0 26px;
   width: 26px;
   height: 26px;
+  min-width: 26px;
+  padding: 0;
+  box-sizing: border-box;
 }
 .grid_actions .pi,
 .grid_more .pi{
   font-size: 12px;
+}
+.grid_action_delete .p-menu-item-content,
+.grid_action_delete .p-menu-item-content:hover,
+.grid_action_delete.p-focus .p-menu-item-content,
+.grid_action_delete .p-menu-item-icon,
+.grid_action_delete .p-menu-item-content:hover .p-menu-item-icon,
+.grid_action_delete.p-focus .p-menu-item-icon{
+  color: var(--p-red-500, #dc2626) !important;
 }
 .grid_name{
   margin-top: 4px;
