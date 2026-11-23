@@ -1,5 +1,5 @@
 import type { FileItem } from "./store";
-import store from "./store";
+import store, { resolvePath } from "./store";
 import preview from '../hooks/preview';
 import selector from "./selector";
 import hostname from "./hostname";
@@ -9,17 +9,17 @@ import copymove from "./copymove";
 import { nanoid } from "nanoid";
 import progress from "./progress";
 
-export async function getList() {
+async function fetchList(path: string): Promise<FileItem[]> {
   const { data: response } = await axios.post(
     `${hostname}/api/list`,
-    { path: store().pathResolve },
+    { path },
     { headers: { token: store().token } }
   );
 
   const items: { name: string; size: number; isDir: boolean }[] =
     response.ok && response.items != null ? response.items : [];
 
-  store().fileList = items
+  return items
     .sort((a, b) => {
       if (a.isDir !== b.isDir) return a.isDir ? -1 : 1;
       return a.name.localeCompare(b.name, undefined, { sensitivity: "base" });
@@ -27,28 +27,30 @@ export async function getList() {
     .map((item) => ({ ...item, selected: false }));
 }
 
+export async function getList() {
+  store().fileList = await fetchList(store().pathResolve);
+}
+
+async function navigate(path: string[]) {
+  const items = await fetchList(resolvePath(path));
+  // 路径和列表必须在同一轮更新中提交，否则旧文件会短暂配上新路径，触发错误的缩略图请求
+  store().path = path;
+  store().fileList = items;
+  selector().selectedFile=[];
+  selector().indeterminate=false;
+  selector().selectAll=false;
+}
+
 export async function clickHanlder(item: FileItem){
   if(item.isDir){
-    store().path.push(item.name);
-    await getList();
-    selector().selectedFile=[];
-    selector().indeterminate=false;
-    selector().selectAll=false;
+    await navigate([...store().path, item.name]);
   }else{
     preview().previewFile=item.name;
   }
 }
 
 export async function pathHandler(index?: number){
-  if(index==undefined){
-    store().path=[];
-  }else{
-    store().path.splice(index+1);
-  }
-  selector().selectAll=false;
-  selector().selectedFile=[];
-  selector().indeterminate=false;
-  await getList();
+  await navigate(index==undefined ? [] : store().path.slice(0, index + 1));
 }
 
 interface MutliData{

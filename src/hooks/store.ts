@@ -10,6 +10,15 @@ export interface FileItem{
 
 export type ViewMode = 'list' | 'grid';
 
+export function resolvePath(path: string[]): string{
+  let val="/";
+  path.map((item)=>{
+    val+=item;
+    val+="/";
+  })
+  return val;
+}
+
 export default defineStore("store", ()=>{
   let fileList=ref<FileItem[]>([]);
   let token=ref<string>("");
@@ -17,14 +26,7 @@ export default defineStore("store", ()=>{
   let showHide=ref<boolean>(true);
   let viewMode=ref<ViewMode>(localStorage.getItem("viewMode")==='grid' ? 'grid' : 'list');
 
-  const pathResolve=computed(()=>{
-    let val="/";
-    path.value.map((item)=>{
-      val+=item;
-      val+="/";
-    })
-    return val;
-  })
+  const pathResolve=computed(()=>resolvePath(path.value))
 
   const list=computed(()=>{
     return showHide.value ? fileList.value : fileList.value.filter((item)=>!item.name.startsWith("."))
