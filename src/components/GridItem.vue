@@ -12,7 +12,7 @@
        @dragleave="onDragLeave"
        @drop="onDrop">
     <div class="grid_thumb">
-      <img class="grid_fallback" :src="fallbackIcon" alt="" />
+      <img class="grid_fallback" :class="{ 'is_loaded': loaded }" :src="fallbackIcon" alt="" />
       <img v-if="isImage && shouldLoad && !failed"
            class="grid_thumbnail"
            :class="{ 'is_loaded': loaded }"

@@ -252,6 +252,10 @@ body{
   object-fit: contain;
   opacity: .65;
   pointer-events: none;
+  transition: opacity .2s linear;
+}
+.grid_fallback.is_loaded{
+  opacity: 0;
 }
 .grid_thumbnail{
   pointer-events: none;
