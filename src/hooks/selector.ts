@@ -7,6 +7,7 @@ export default defineStore("selector", ()=>{
   let selectedFile=ref<FileItem[]>([]);
   let selectAll=ref<boolean>(false);
   let indeterminate=ref<boolean>(false);
+  let draggingFiles=ref<string[]>([]);
 
   function selectAllChange(e: any){
     if(e.target.checked){
@@ -49,5 +50,5 @@ export default defineStore("selector", ()=>{
     }
   }
 
-  return {selectAll, selectedFile, selectAllChange, selectChange, indeterminate}
+  return {selectAll, selectedFile, selectAllChange, selectChange, indeterminate, draggingFiles}
 })

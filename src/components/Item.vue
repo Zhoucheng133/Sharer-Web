@@ -53,16 +53,38 @@ const item = computed(() => props.item);
 const toast = useToast();
 const { t } = useI18n();
 
-const isDragging = ref(false);
+const isDragging = computed(() => selector().draggingFiles.some(name => name === item.value.name));
 const isDropTarget = ref(false);
 
 const isInternalDrag = (e: DragEvent) => !!e.dataTransfer?.types.includes(INTERNAL_DRAG_MIME);
+
+function setDragImage(e: DragEvent, text: string) {
+  if (!e.dataTransfer) return;
+  const el = document.createElement('div');
+  el.textContent = text;
+  Object.assign(el.style, {
+    position: 'fixed',
+    top: '-1000px',
+    left: '-1000px',
+    padding: '8px 14px',
+    borderRadius: '6px',
+    backgroundColor: '#06B6D4',
+    color: '#fff',
+    fontSize: '14px',
+    fontWeight: '600',
+    whiteSpace: 'nowrap',
+    pointerEvents: 'none',
+  });
+  document.body.appendChild(el);
+  e.dataTransfer.setDragImage(el, el.offsetWidth / 2, el.offsetHeight / 2);
+  setTimeout(() => el.remove(), 0);
+}
 
 function onDragStart(e: DragEvent) {
   if (!e.dataTransfer) return;
 
   const selected = selector().selectedFile;
-  const files = item.value.selected && selected.some(file => file.name === item.value.name)
+  const files = selected.some(file => file.name === item.value.name)
     ? selected.map(file => file.name)
     : [item.value.name];
 
@@ -70,11 +92,15 @@ function onDragStart(e: DragEvent) {
   e.dataTransfer.setData(INTERNAL_DRAG_MIME, JSON.stringify(payload));
   e.dataTransfer.setData('text/plain', item.value.name);
   e.dataTransfer.effectAllowed = 'move';
-  isDragging.value = true;
+  selector().draggingFiles = files;
+
+  if (files.length > 1) {
+    setDragImage(e, t('draggingItems', { n: files.length }));
+  }
 }
 
 function onDragEnd() {
-  isDragging.value = false;
+  selector().draggingFiles = [];
   isDropTarget.value = false;
 }
 
@@ -103,8 +129,8 @@ async function onDrop(e: DragEvent) {
   if (!item.value.isDir || !isInternalDrag(e) || !e.dataTransfer) return;
   e.preventDefault();
   e.stopPropagation();
+  selector().draggingFiles = [];
   isDropTarget.value = false;
-  isDragging.value = false;
 
   let payload: DragMovePayload;
   try {

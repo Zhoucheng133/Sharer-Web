@@ -57,4 +57,5 @@ export default {
   'copySamePath': '目標位置與当前位置相同',
   'moveSamePath': '目標位置與当前位置相同',
   'moveIntoSelf': '無法將資料夾移動到自身或其子資料夾',
+  'draggingItems': '移動 {n} 個項目',
 };

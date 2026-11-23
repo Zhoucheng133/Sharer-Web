@@ -57,4 +57,5 @@ export default {
   'copySamePath': 'Target is the same as current location',
   'moveSamePath': 'Target is the same as current location',
   'moveIntoSelf': 'Cannot move a folder into itself or its subfolder',
+  'draggingItems': 'Moving {n} items',
 };
