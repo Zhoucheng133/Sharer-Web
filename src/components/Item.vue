@@ -35,6 +35,7 @@ import { useI18n } from 'vue-i18n';
 import type { FileItem } from '../hooks/store';
 import store from '../hooks/store';
 import selector from '../hooks/selector';
+import copymove from '../hooks/copymove';
 import { clickHanlder, downloadHandler, delHandler, renameHandler, moveFiles } from '../hooks/handler';
 import { calSize } from '../hooks/static';
 import drawer from '../hooks/drawer';
@@ -54,7 +55,11 @@ const item = computed(() => props.item);
 const toast = useToast();
 const { t } = useI18n();
 
-const isDragging = computed(() => selector().draggingFiles.some(name => name === item.value.name));
+const isDragging = computed(() => {
+  if (selector().draggingFiles.some(name => name === item.value.name)) return true;
+  const cm = copymove().copyMoveFiles;
+  return cm?.type === 'move' && cm.path === store().pathResolve && cm.files.includes(item.value.name);
+});
 const isDropTarget = ref(false);
 
 const isInternalDrag = (e: DragEvent) => !!e.dataTransfer?.types.includes(INTERNAL_DRAG_MIME);
