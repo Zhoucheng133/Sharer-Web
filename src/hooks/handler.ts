@@ -257,21 +257,18 @@ export function mkdirHandler(){
   dialogs().showMkdirDialog=true;
 }
 
-export async function copyMoveHandler(toast: any, t: any, type: 'copy' | 'move') {
-  const cm = copymove();
-  if (!cm.copyMoveFiles) return;
-
-  if (cm.copyMoveFiles.path === store().pathResolve) {
+async function copyMoveRequest(toast: any, t: any, type: 'copy' | 'move', from: string, files: string[], to: string) {
+  if (from === to) {
     const key = type === 'copy' ? 'copySamePath' : 'moveSamePath';
     toast.add({ severity: 'warn', summary: t(key), life: 3000 });
-    return;
+    return false;
   }
 
   const endpoint = type === 'copy' ? '/api/copy' : '/api/move';
   const { data: response } = await axios.post(`${hostname}${endpoint}`, {
-    from: cm.copyMoveFiles.path,
-    to: store().pathResolve,
-    files: cm.copyMoveFiles.files,
+    from,
+    to,
+    files,
   }, {
     headers: { token: store().token }
   });
@@ -279,13 +276,25 @@ export async function copyMoveHandler(toast: any, t: any, type: 'copy' | 'move')
   if (response.ok) {
     const key = type === 'copy' ? 'copyOk' : 'moveOk';
     toast.add({ severity: 'success', summary: t('opOk'), detail: t(key), life: 2000 });
-    cm.copyMoveFiles = null;
+    copymove().clearCopyMove();
     selector().selectedFile = [];
     await getList();
+    return true;
   } else {
     const key = type === 'copy' ? 'copyFail' : 'moveFail';
     toast.add({ severity: 'error', summary: t(key), detail: response.msg, life: 2000 });
+    return false;
   }
+}
+
+export async function copyMoveHandler(toast: any, t: any, type: 'copy' | 'move') {
+  const cm = copymove();
+  if (!cm.copyMoveFiles) return;
+  await copyMoveRequest(toast, t, type, cm.copyMoveFiles.path, cm.copyMoveFiles.files, store().pathResolve);
+}
+
+export async function moveFiles(toast: any, t: any, from: string, files: string[], to: string) {
+  return copyMoveRequest(toast, t, 'move', from, files, to);
 }
 
 export const addItems=(fileUploader: any, dirUploader: any, t: any)=>{

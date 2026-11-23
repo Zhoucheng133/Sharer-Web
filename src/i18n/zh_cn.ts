@@ -56,4 +56,5 @@ export default {
   'moveFail': '移动失败',
   'copySamePath': '目标位置与当前位置相同',
   'moveSamePath': '目标位置与当前位置相同',
+  'moveIntoSelf': '不能将目录移动到自身或其子目录',
 };

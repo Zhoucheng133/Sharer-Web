@@ -227,17 +227,22 @@ onMounted(async ()=>{
 const dragCounter = ref(0);
 const isDragging=ref(false);
 
-const onDragEnter=(e: any)=>{
+const isExternalDrag=(e: DragEvent)=>!!e.dataTransfer?.types.includes('Files');
+
+const onDragEnter=(e: DragEvent)=>{
+  if (!isExternalDrag(e)) return;
   dragCounter.value++;
   isDragging.value = true;
   e.preventDefault();
 }
 
-const onDragOver=(e: any)=>{
+const onDragOver=(e: DragEvent)=>{
+  if (!isExternalDrag(e)) return;
   e.preventDefault();
 }
 
-const onDragLeave=()=>{
+const onDragLeave=(e: DragEvent)=>{
+  if (!isExternalDrag(e)) return;
   dragCounter.value--;
   if (dragCounter.value === 0) {
     isDragging.value = false;
@@ -245,6 +250,7 @@ const onDragLeave=()=>{
 }
 
 const onDrop = async (e: DragEvent) => {
+  if (!isExternalDrag(e)) return;
   e.preventDefault();
   dragCounter.value = 0;
   isDragging.value = false;
