@@ -28,6 +28,25 @@ body{
   row-gap: 4px;
   margin-top: 10px;
 }
+.toolbar_action .p-button-icon{
+  display: none;
+}
+@media (max-width: 500px) {
+  .toolbar_action.p-button{
+    width: 32px;
+    height: 32px;
+    min-width: 32px;
+    padding: 0;
+  }
+  .toolbar_action .p-button-label{
+    display: none;
+  }
+  .toolbar_action .p-button-icon{
+    display: inline-block;
+    font-size: 14px;
+    margin: 0;
+  }
+}
 .path{
   display: flex;
   overflow-x: auto;

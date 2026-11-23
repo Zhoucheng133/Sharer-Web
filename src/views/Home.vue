@@ -18,8 +18,12 @@
         <Button type="button" icon="pi pi-plus" @click="addButtons" aria-haspopup="true" aria-controls="overlay_menu" size="small" />
         <Menu ref="add" id="overlay_menu" :model="addItems(fileUploader, dirUploader, t)" :popup="true" />
 
-        <Button :label="t('download')" variant="text" size="small" style="margin-left: 10px;"  :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
-        <Button :label="t('delete')" variant="text" size="small" severity="danger" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
+        <Button class="toolbar_action" icon="pi pi-download" :label="t('download')" variant="text" size="small"
+                style="margin-left: 10px;" :title="t('download')" :aria-label="t('download')"
+                :disabled="selector().selectedFile.length==0" @click="downloadHandler()" />
+        <Button class="toolbar_action" icon="pi pi-trash" :label="t('delete')" variant="text" size="small" severity="danger"
+                style="margin-left: 5px;" :title="t('delete')" :aria-label="t('delete')"
+                :disabled="selector().selectedFile.length==0" @click="menuDelHandler($event, confirm, toast, t)"/>
         <Button :label="t('copy')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'copy')"></Button>
         <Button :label="t('move')" variant="text" size="small" style="margin-left: 5px;" :disabled="selector().selectedFile.length==0" v-if="copyMove.copyMoveFiles==null" @click="copyMove.copyMoveSelector(selector().selectedFile, 'move')"></Button>
         <Button :label="t('copyHere')" variant="text" size="small" style="margin-left: 5px;" v-if="copyMove.copyMoveFiles?.type=='copy'" @click="copyMoveHandler(toast, t, 'copy')"></Button>
