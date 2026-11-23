@@ -1,8 +1,10 @@
 <template>
   <Drag class="drag_view" v-if="isDragging" />
+  <div v-if="selectionBox.active" class="selection_box"
+       :style="{ left: selectionBox.x + 'px', top: selectionBox.y + 'px', width: selectionBox.w + 'px', height: selectionBox.h + 'px' }"></div>
   <Toast />
   <ConfirmPopup />
-  <div class="page">
+  <div class="page" @mousedown="onListMouseDown">
     <div class="fixed">
       <div class="title_bar"></div>
       <div class="path">
@@ -52,7 +54,7 @@
 </template>
 
 <script lang="ts" setup>
-import { computed, onMounted, ref } from 'vue';
+import { computed, onMounted, onUnmounted, ref } from 'vue';
 import "../styles/home.css";
 import store, { type FileItem } from '../hooks/store';
 import { Button, Checkbox, ConfirmPopup, Toast, Menu, ContextMenu } from 'primevue';
@@ -218,11 +220,98 @@ onMounted(async ()=>{
     })
   }
   getList();
+  window.addEventListener("mousemove", onBoxMouseMove);
+  window.addEventListener("mouseup", onBoxMouseUp);
   window.addEventListener("dragenter", onDragEnter);
   window.addEventListener("dragover", onDragOver);
   window.addEventListener("dragleave", onDragLeave);
   window.addEventListener("drop", onDrop);
 })
+
+onUnmounted(()=>{
+  window.removeEventListener("mousemove", onBoxMouseMove);
+  window.removeEventListener("mouseup", onBoxMouseUp);
+})
+
+const selectionBox = ref({
+  active: false,
+  startX: 0,
+  startY: 0,
+  x: 0,
+  y: 0,
+  w: 0,
+  h: 0,
+  additive: false,
+});
+
+function onListMouseDown(e: MouseEvent) {
+  if (e.button !== 0) return;
+  const target = e.target as HTMLElement;
+  if (target.closest('.file_item') || target.closest('.fixed')) return;
+
+  const additive = e.ctrlKey || e.metaKey;
+  if (!additive) {
+    store().fileList.forEach(item => item.selected = false);
+    selector().selectedFile = [];
+    selector().selectAll = false;
+    selector().indeterminate = false;
+  }
+
+  selectionBox.value = {
+    active: true,
+    startX: e.clientX,
+    startY: e.clientY,
+    x: e.clientX,
+    y: e.clientY,
+    w: 0,
+    h: 0,
+    additive,
+  };
+  e.preventDefault();
+}
+
+function onBoxMouseMove(e: MouseEvent) {
+  const box = selectionBox.value;
+  if (!box.active) return;
+
+  box.x = Math.min(box.startX, e.clientX);
+  box.y = Math.min(box.startY, e.clientY);
+  box.w = Math.abs(e.clientX - box.startX);
+  box.h = Math.abs(e.clientY - box.startY);
+
+  const left = box.x;
+  const top = box.y;
+  const right = left + box.w;
+  const bottom = top + box.h;
+
+  document.querySelectorAll<HTMLElement>('.file_item').forEach(el => {
+    const rect = el.getBoundingClientRect();
+    const intersects = rect.left < right && rect.right > left && rect.top < bottom && rect.bottom > top;
+    const name = el.dataset.name;
+    if (!name) return;
+    const item = store().fileList.find(i => i.name === name);
+    if (!item) return;
+
+    if (intersects) {
+      if (!item.selected) {
+        item.selected = true;
+        selector().selectedFile.push(item);
+      }
+    } else if (!box.additive && item.selected) {
+      item.selected = false;
+      selector().selectedFile = selector().selectedFile.filter(f => f.name !== name);
+    }
+  });
+
+  const total = store().fileList.length;
+  const count = selector().selectedFile.length;
+  selector().selectAll = count === total;
+  selector().indeterminate = count > 0 && count < total;
+}
+
+function onBoxMouseUp() {
+  selectionBox.value.active = false;
+}
 
 const dragCounter = ref(0);
 const isDragging=ref(false);

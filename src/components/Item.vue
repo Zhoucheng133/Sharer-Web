@@ -1,5 +1,6 @@
 <template>
   <div class="file_item"
+       :data-name="item.name"
        :class="{ 'dragging': isDragging, 'drag_over': isDropTarget }"
        draggable="true"
        @dragstart="onDragStart"
