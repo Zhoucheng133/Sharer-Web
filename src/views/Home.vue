@@ -4,7 +4,7 @@
        :style="{ left: selectionBox.x + 'px', top: selectionBox.y + 'px', width: selectionBox.w + 'px', height: selectionBox.h + 'px' }"></div>
   <Toast />
   <ConfirmPopup />
-  <div class="page" @mousedown="onListMouseDown">
+  <div class="page">
     <div class="fixed">
       <div class="title_bar"></div>
       <div class="path">
@@ -218,6 +218,7 @@ const showBodyMenu=(event: any)=>{
 }
 
 onMounted(async ()=>{
+  window.addEventListener("mousedown", onListMouseDown);
   document.body.addEventListener("contextmenu", showBodyMenu);
   store().showHide=localStorage.getItem("showHide")=='true' ? true : false
   if(fileUploader.value){
@@ -247,6 +248,7 @@ onMounted(async ()=>{
 })
 
 onUnmounted(()=>{
+  window.removeEventListener("mousedown", onListMouseDown);
   window.removeEventListener("mousemove", onBoxMouseMove);
   window.removeEventListener("mouseup", onBoxMouseUp);
 })
@@ -262,10 +264,33 @@ const selectionBox = ref({
   additive: false,
 });
 
+const selectionBlockedSelector = [
+  '.file_item',
+  '.fixed',
+  '.p-dialog',
+  '.p-dialog-mask',
+  '.p-menu',
+  '.p-contextmenu',
+  '.p-drawer',
+  '.p-toast',
+  '.p-confirm-popup',
+  '.p-overlaypanel',
+  '.progress_component',
+  '.preview',
+  '.drag_view',
+  'button',
+  'input',
+  'a',
+].join(',');
+
 function onListMouseDown(e: MouseEvent) {
   if (e.button !== 0) return;
+  // 滚动条区域不启动框选
+  if (e.clientX >= document.documentElement.clientWidth ||
+      e.clientY >= document.documentElement.clientHeight) return;
+
   const target = e.target as HTMLElement;
-  if (target.closest('.file_item') || target.closest('.fixed')) return;
+  if (target.closest(selectionBlockedSelector)) return;
 
   const additive = e.ctrlKey || e.metaKey;
   if (!additive) {
